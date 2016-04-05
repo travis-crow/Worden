@@ -85,10 +85,11 @@ public class IndexController {
                 .build();
                 
                 fullApi.prepareInstances();
+                fullApi.calcInfoGain();
                 fullApi.prepareAnalyzer();
                 fullApi.run();
                 
-                String string = fullApi.getStatString(); 
+                String string = fullApi.getStatString() +"[-----------------]\n"+fullApi.getReadableInfoGain(false); 
                 return string;
 		    }
 
