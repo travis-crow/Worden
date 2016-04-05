@@ -50,8 +50,8 @@ public class IndexController {
 				ProblemSet ps = new ProblemSet();
 				ArrayList<Document> documents = new ArrayList<Document>();
                 Iterator<String> itr = request.getFileNames();
-                String testDir = "/Users/tdutko001c/git/wordenseniordesign/References/test/";///request.getServletContext().getRealPath("/TestDocument/");
-                String refDir = "/Users/tdutko001c/git/wordenseniordesign/References/train/";//request.getServletContext().getRealPath("/References/");
+                String testDir = "./References/test/";///request.getServletContext().getRealPath("/TestDocument/");
+                String refDir = "./References/train/";//request.getServletContext().getRealPath("/References/");
                 String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
                 System.out.println("Temporary File Directory: "+refDir);
                 while (itr.hasNext()) {
@@ -67,13 +67,17 @@ public class IndexController {
                 }	
                 ps.addTrainDocs(userAuthor, documents);
                 
-                File otherAuthorsDir = new File("Users/tdutko001c/git/jstylo/jsan_resources/corpora/amt");
+                //TODO load in the sample files
+                //sample files are currently located in References/samples
+                /*
+                File otherAuthorsDir = new File("/Users/tdutko001c/git/wordenseniordesign/References/samples/drexel_1");
                 for (File authorDir : otherAuthorsDir.listFiles()){
                     List<Document> docs = new ArrayList<Document>();
                     for (File f : authorDir.listFiles()){
                         docs.add(makeDoc(f,authorDir.getName()));
                     }
                 }
+                */
                 
                 System.out.println("Problem Set XML\n"+ps.toXMLString());
                 FullAPI fullApi = new Builder()
@@ -101,7 +105,7 @@ public class IndexController {
         String filepath = destinationDirectory + file.getName();
         File dest = new File(filepath);
         file.transferTo(dest);
-        return new Document(dest.getPath(), author, dest.getName());
+        return new Document(dest.getPath(), author, file.getName());
     }
 
 }
