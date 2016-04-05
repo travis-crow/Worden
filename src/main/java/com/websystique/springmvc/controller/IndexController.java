@@ -48,36 +48,32 @@ public class IndexController {
 		    public @ResponseBody String startProcess(MultipartHttpServletRequest request, @RequestParam("type") String type ) throws IOException {
 
 				ProblemSet ps = new ProblemSet();
-				ArrayList<Document> documents = new ArrayList<Document>();
+				ps.setTrainCorpusName("Worden Experiment");
                 Iterator<String> itr = request.getFileNames();
-                String testDir = "./References/test/";///request.getServletContext().getRealPath("/TestDocument/");
-                String refDir = "./References/train/";//request.getServletContext().getRealPath("/References/");
+                
+                //TODO need to make these paths relative / internal
+                String testDir = "/Users/tdutko001c/git/wordenseniordesign/References/test/";///request.getServletContext().getRealPath("/TestDocument/");
+                String refDir = "/Users/tdutko001c/git/wordenseniordesign/References/train/";//request.getServletContext().getRealPath("/References/");
                 String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
                 System.out.println("Temporary File Directory: "+refDir);
+                
+                //TODO is the document to identify always at a specific index? 
+                //Surely there's a better way to determine which is which than whether or not we're at the end of the iterator
                 while (itr.hasNext()) {
                     String uploadedFile = itr.next();
                     MultipartFile file = request.getFile(uploadedFile);
                     if(!itr.hasNext()){
-
+                        System.out.println("Adding test document: "+file.getOriginalFilename());
                         ps.addTestDoc(userAuthor, makeDoc(file,userAuthor,testDir));
                     }
                     else{
-        		        documents.add(makeDoc(file,userAuthor,refDir));
+                        System.out.println("Adding train document: "+file.getOriginalFilename());
+                        ps.addTrainDoc(userAuthor, makeDoc(file,userAuthor,refDir));
                     }
                 }	
-                ps.addTrainDocs(userAuthor, documents);
                 
                 //TODO load in the sample files
-                //sample files are currently located in References/samples
-                /*
-                File otherAuthorsDir = new File("/Users/tdutko001c/git/wordenseniordesign/References/samples/drexel_1");
-                for (File authorDir : otherAuthorsDir.listFiles()){
-                    List<Document> docs = new ArrayList<Document>();
-                    for (File f : authorDir.listFiles()){
-                        docs.add(makeDoc(f,authorDir.getName()));
-                    }
-                }
-                */
+                //switch on essay/email/tweet dbs
                 
                 System.out.println("Problem Set XML\n"+ps.toXMLString());
                 FullAPI fullApi = new Builder()
@@ -102,10 +98,11 @@ public class IndexController {
 
     private Document makeDoc(MultipartFile file, String author, String destinationDirectory)
             throws IllegalStateException, IOException {
-        String filepath = destinationDirectory + file.getName();
+        String filepath = destinationDirectory + file.getOriginalFilename();
         File dest = new File(filepath);
+        System.out.println("Adding file: "+file.getOriginalFilename()+" to "+filepath+" in "+destinationDirectory);
         file.transferTo(dest);
-        return new Document(dest.getPath(), author, file.getName());
+        return new Document(dest.getPath(), author, file.getOriginalFilename());
     }
 
 }
