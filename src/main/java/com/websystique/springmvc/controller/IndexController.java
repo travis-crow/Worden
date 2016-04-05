@@ -4,9 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-
-import org.apache.commons.fileupload.FileUpload;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 
 import com.jgaap.generics.Document;
 
@@ -29,6 +27,8 @@ import edu.drexel.psal.jstylo.generics.ProblemSet;
 @RequestMapping("/")
 public class IndexController {
 
+        private static String userAuthor = "testAuthor";
+    
 		@RequestMapping("/")
 	    public String getIndexPage() {
 	        return "UserManagement";
@@ -50,39 +50,32 @@ public class IndexController {
 				ProblemSet ps = new ProblemSet();
 				ArrayList<Document> documents = new ArrayList<Document>();
                 Iterator<String> itr = request.getFileNames();
-                String testDir = "/Users/Eric/Documents/TestDocument/";///request.getServletContext().getRealPath("/TestDocument/");
-                String refDir = "/Users/Eric/Documents/References/";//request.getServletContext().getRealPath("/References/");
+                String testDir = "/Users/tdutko001c/git/wordenseniordesign/References/test/";///request.getServletContext().getRealPath("/TestDocument/");
+                String refDir = "/Users/tdutko001c/git/wordenseniordesign/References/train/";//request.getServletContext().getRealPath("/References/");
                 String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
-                System.out.println(refDir);
-                Builder builder = new Builder();
+                System.out.println("Temporary File Directory: "+refDir);
                 while (itr.hasNext()) {
                     String uploadedFile = itr.next();
                     MultipartFile file = request.getFile(uploadedFile);
-                    String mimeType = file.getContentType();
-                    String filename = file.getOriginalFilename();
-                    byte[] bytes = file.getBytes();
-                    String filepath;
                     if(!itr.hasNext()){
-                        filepath = testDir + filename;
-                        File dest = new File(filepath);
-                        file.transferTo(dest);
-                        Document d1 = new Document(filepath,"TestAuthor",filename);
-                        ps.addTestDoc("testAuthor", d1);
 
+                        ps.addTestDoc(userAuthor, makeDoc(file,userAuthor,testDir));
                     }
                     else{
-                        filepath = refDir + filename;
-                        File dest = new File(filepath);
-                        file.transferTo(dest);
-                        Document d1 = new Document(filepath,"TestAuthor",filename);
-        		        documents.add(d1);
-        		        ps.addTrainDocs("testAuthor", documents);
+        		        documents.add(makeDoc(file,userAuthor,refDir));
                     }
-                    
-                 
                 }	
+                ps.addTrainDocs(userAuthor, documents);
                 
-                System.out.println(ps.toXMLString());
+                File otherAuthorsDir = new File("Users/tdutko001c/git/jstylo/jsan_resources/corpora/amt");
+                for (File authorDir : otherAuthorsDir.listFiles()){
+                    List<Document> docs = new ArrayList<Document>();
+                    for (File f : authorDir.listFiles()){
+                        docs.add(makeDoc(f,authorDir.getName()));
+                    }
+                }
+                
+                System.out.println("Problem Set XML\n"+ps.toXMLString());
                 FullAPI fullApi = new Builder()
                 .cfdPath(xml)
                 .ps(ps)
@@ -99,6 +92,16 @@ public class IndexController {
                 return string;
 		    }
 
-		
-		
+    private Document makeDoc(File file, String author) {
+        return new Document(file.getPath(), author, file.getName());
+    }
+
+    private Document makeDoc(MultipartFile file, String author, String destinationDirectory)
+            throws IllegalStateException, IOException {
+        String filepath = destinationDirectory + file.getName();
+        File dest = new File(filepath);
+        file.transferTo(dest);
+        return new Document(dest.getPath(), author, dest.getName());
+    }
+
 }
