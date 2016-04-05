@@ -1,0 +1,8 @@
+com/websystique/springmvc/configuration/HelloWorldInitializer.class
+com/websystique/springmvc/model/User.class
+com/websystique/springmvc/controller/IndexController.class
+com/websystique/springmvc/configuration/CORSFilter.class
+com/websystique/springmvc/controller/HelloWorldRestController.class
+com/websystique/springmvc/service/UserService.class
+com/websystique/springmvc/service/UserServiceImpl.class
+com/websystique/springmvc/configuration/HelloWorldConfiguration.class
