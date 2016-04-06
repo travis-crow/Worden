@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+	<title>Worden - Results</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<link href="../css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<style>
+		.modal {
+			max-height: 70%;
+			width: 40%;
+		}
+
+		@media only screen and (max-width: 992px) {
+			.modal {
+				width: 80%;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<nav class="white" role="navigation">
+			<div class="nav-wrapper" style="margin-left: 1em;">
+				<a href="../" class="brand-logo right"><img id="worden-logo" src="../images/worden-banner-logo.png"></a>
+				<div class="col s12 hide-on-med-and-down">
+					<a href="../" class="breadcrumb">Home</a>
+					<a href="../test-your-own-document/" class="breadcrumb">Test Your Own Document</a>
+					<a href="../adding-other-authors-documents/" class="breadcrumb">Adding Other Authors Documents</a>
+					<a href="./results-test-your-own-document" class="breadcrumb">Results</a>
+				</div>
+			</div>
+		</nav>
+	</header>
+	
+	<main>
+		<div class="section" id="index-banner">
+			<h3 class="header center">Results</h3>
+		</div>
+		<div class="row">
+			<div class="container">
+				<p>Worden believes <strong id="suspectedAuthor"></strong> was the true author of <strong class="documentName"></strong> among the <strong id="numberOfAuthors"></strong> other authors. You can <a href="#modal1" class="distribution-trigger purple-text underline">click here to see Worden's alternate guesses.</a></p>
+				<br>
+			</div>
+			<div class="row" id="suggestions">
+			</div>
+		</div>
+
+		<!-- Modal Structure -->
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<div class="container" style="overflow-y: scroll;overflow-x: hidden;max-height:350px;">
+					<div class="row">
+						<div class="col s12 l10 offset-l1">
+							<table class="centered highlight bordered">
+								<thead>
+									<tr>
+										<th data-field="id">Author</th>
+										<th data-field="name">Wrote <span class="documentName"></span></th>
+									</tr>
+								</thead>
+								<tbody id="certaintyTable">
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-action modal-close waves-effect waves-light purple btn" style="margin-right:5px;">Close</a>
+			</div>
+		</div>
+	</main>
+
+	<footer class="page-footer white">
+		<div class="container">
+			<div class="row">
+				<div class="col s7 offset-s5">
+					<a href="http://drexel.edu/cci/"><img width="45" style="padding-top:15px;" src="../images/drexel-logo.png" /></a>
+				</div>
+			</div>
+		</div>
+	</footer>
+	
+	<!-- Scripts -->
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="../js/materialize.js"></script>
+	<script>
+		var jStyloResults = "";
+
+		$(document).ready(function() {
+			var client = new XMLHttpRequest();
+			client.open("GET", "/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 2/CI 492 - Senior Design II/Deliverables/worden/ui/results.txt");
+			var REQUEST_FINISHED_AND_RESPONSE_READY = 4;
+			client.onreadystatechange = function() {
+				// onreadystatechange fires multiple times, we only want the ready state
+				// when it's finished and the response is ready (4)
+				if (client.readyState != REQUEST_FINISHED_AND_RESPONSE_READY) {
+					return;
+				}
+
+				jStyloResults = client.responseText;
+
+				var CERTAINTY_DIVIDER = "\n========\n";
+				var charIndex = jStyloResults.indexOf(CERTAINTY_DIVIDER) + CERTAINTY_DIVIDER.length;
+				var certainty = jStyloResults.substring(charIndex);
+				var certaintyLines = certainty.split('\n');
+				var names = certaintyLines[0].split('|');
+				var percentages = certaintyLines[2].split('|');
+				var documentName = percentages[0].trim();
+				var chosenAuthor = "";
+				var certaintyPercentage = 0;
+				var combinedLists = [];
+				for (var p = 1; p < percentages.length; p++) {
+					var tmpPercentage = Math.round(Number(parseInt(0.5 + (percentages[p].split(" ")[1] * 100))));
+					var tmpAuthorName = names[p].trim();
+					var tmpList = [tmpPercentage, tmpAuthorName];
+					if (tmpAuthorName == "_Unknown_" || !tmpAuthorName) {
+						continue;
+					}
+					if (percentages[p].indexOf('+') != -1) {
+						certaintyPercentage	= tmpPercentage;
+						chosenAuthor = tmpAuthorName;
+					}
+					combinedLists.push(tmpList);
+				}
+				combinedLists.sort(sortAuthorPercentages);
+				for (var p = 0; p < combinedLists.length; p++) {
+					$("#certaintyTable").append("<tr>"
+												 +"<td>"+combinedLists[p][1]+"</td>"
+												 +"<td>"+combinedLists[p][0]+"%</td>"
+											   +"</tr>");
+				}
+				$("#suspectedAuthor").append(chosenAuthor);
+				$(".documentName").append(documentName);
+				$("#numberOfAuthors").append(percentages.length-4);
+
+				var INFOGAIN_DIVIDER = "\n===================================================\n";
+				charIndex = jStyloResults.indexOf(INFOGAIN_DIVIDER) + INFOGAIN_DIVIDER.length;
+				var infoGainFeatures = jStyloResults.substring(charIndex);
+				var featureLine = infoGainFeatures.split('\n');
+
+				var FEATURE_INDEX = 1;
+				var WEIGHT_INDEX = 2;
+				var STYLE_TOKENS_REGEX = /\(([)]+)\)/;
+				var numbersFontWeight = 900;
+				var uniqueCharactersFontWeight = 900;
+				var misspelledWordsFontWeight = 900;
+				var punctuationFontWeight = 900;
+				var wordLengthsFontWeight = 900;
+				var wordsAndWordCombinationsFontWeight = 900;
+				var lettersAndLetterCombinations = 900;
+				var functionWordsFontWeight = 900;
+				var numbersCount = 0;
+				var uniqueCharactersCount = 0;
+				var misspelledWordsCount = 0;
+				var punctuationCount = 0;
+				var wordLengthsCount = 0;
+				var wordsAndWordCombinationsCount = 0;
+				var lettersAndLetterCombinationsCount = 0;
+				var functionWordsCount = 0;
+
+				for (var i = 0; i < featureLine.length; i++) {
+					if (featureLine[i] == "done!") {
+						break;
+					}
+
+					var tokens = featureLine[i].split(/\s+/g);
+					if (tokens.length > 3) {
+						continue; // "Simple" feature, passing for now...
+					}
+					var feature = tokens[FEATURE_INDEX];
+					var weight = tokens[WEIGHT_INDEX];
+					
+					var featureTokens = feature.split('{');
+					var featureName = featureTokens[0];
+					var featureStyles = featureTokens[1];
+
+					if (featureName == "Digits" || featureName == "Two-Digit-Numbers" || featureName == "Three-Digit-Numbers") {
+						numbersCount++;
+						if (numbersCount > 10) {
+							return;
+						}
+						createCard(featureStyles, 'number', 'Numbers', numbersFontWeight);
+						if (numbersFontWeight > 300) {
+							numbersFontWeight-=100;
+						}
+					} else if (featureName == "Special-Characters") {
+						uniqueCharactersCount++;
+						if (uniqueCharactersCount > 10) {
+							return;
+						}
+						createCard(featureStyles, 'unique-character', 'Unique Characters', uniqueCharactersFontWeight);
+						if (uniqueCharactersFontWeight > 300) {
+							uniqueCharactersFontWeight-=100;
+						}
+					} else if (featureName == "Misspelled-Words") {
+						misspelledWordsCount++;
+						if (misspelledWordsCount > 10) {
+							continue;
+						}
+						createCard(featureStyles, 'misspelled-words', 'Misspelled Words', misspelledWordsFontWeight);
+						if (misspelledWordsFontWeight > 300) {
+							misspelledWordsFontWeight-=100;
+						}
+					} else if (featureName == "Punctuation") {
+						punctuationCount++;
+						if (punctuationCount > 10) {
+							continue;
+						}
+						createCard(featureStyles, 'punctuation', "Punctuation", punctuationFontWeight);
+						if (punctuationFontWeight > 300) {
+							punctuationFontWeight-=100;
+						}
+					} else if (featureName == "Word-Lengths") {
+						wordLengthsCount++;
+						if (wordLengthsCount > 10) {
+							continue;
+						}
+						createCard(featureStyles, 'word-lengths', "Word Lengths", wordLengthsFontWeight);
+						if (wordLengthsFontWeight > 300) {
+							wordLengthsFontWeight-=100;
+						}
+					} else if (featureName == "Letters" || featureName == "Top-Letter-bigrams" || featureName == "Top-Letter-trigrams") {
+						lettersAndLetterCombinationsCount++;
+						if (lettersAndLetterCombinationsCount > 10) {
+							continue;
+						}
+						createCard(featureStyles, 'letters-and-letter-combinations', "Letters and Letter Combinations", lettersAndLetterCombinations);
+						if (lettersAndLetterCombinations > 300) {
+							lettersAndLetterCombinations-=100;
+						}
+					} else if (featureName == "Function-Words") {
+						functionWordsCount++;
+						if (functionWordsCount > 10) {
+							continue;
+						}
+						createCard(featureStyles, 'function-words', "Function Words", functionWordsFontWeight);
+						if (functionWordsFontWeight > 300) {
+							functionWordsFontWeight-=100;
+						}
+					} else if (featureName == "Words" || featureName == "Word-Bigrams" || featureName == "Word-Trigrams") {
+						wordsAndWordCombinationsCount++;
+						if (wordsAndWordCombinationsCount > 10) {
+							continue;
+						}
+
+						var words = featureStyles.substring(0, featureStyles.length - 1);
+						var processedWords = "";
+						if (featureName == "Words") {
+							processedWords = words;
+						} else {
+							var wordTokens = words.split(")-(");
+							wordTokens[0] = wordTokens[0].substring(1, wordTokens[0].length);
+							wordTokens[wordTokens.length-1] = wordTokens[wordTokens.length-1].substring(0, wordTokens[wordTokens.length-1].length-1);
+							for (var w = 0; w < wordTokens.length; w++) {
+								processedWords = processedWords + wordTokens[w] + " ";
+							}
+						}
+
+						if (document.getElementById("words-and-word-combinations-card") == null) {
+							$("#suggestions").append('<div class="col s12 m6 l4" id="words-and-word-combinations-card">'
+								                     + '<div class="card">'
+								                      + '<div class="card-content">'
+								                       + '<span class="card-title purple-text">Words and Word Combinations</span>'
+								                       + '<p>You seem to use the following word combinations frequently in your writing, the topmost ones being the most revealing. Try rewording these phrases or avoiding them entirely in the document you want to anonymize:</p>'
+								                       + '<ul id="words-and-word-combinations-list">'
+								                        + '<li style="font-weight:'+wordsAndWordCombinationsFontWeight+';">' + processedWords + '</li>'
+								                       + '</ul>'
+								                      + '</div>'
+								                     + '</div>');
+						} else {
+							$("#words-and-word-combinations-list").append('<li style="font-weight:'+wordsAndWordCombinationsFontWeight+';">' + processedWords + '</li>');
+						}
+
+						if (wordsAndWordCombinationsFontWeight > 300) {
+							wordsAndWordCombinationsFontWeight-=100;
+						}
+					}
+				}
+			}
+			client.send();
+
+			// $("ul.tabs").tabs();
+			$('ul.tabs').tabs({
+				changeListener: function (content) {
+					console.log(content);
+				}
+			});
+
+			function sortAuthorPercentages(percentageAuthor1, percentageAuthor2) {
+				return (percentageAuthor2[0] - percentageAuthor1[0]);
+			}
+
+			function createCard(featureStyles, id, title, fontWeight) {
+				var feature = featureStyles.substring(0, featureStyles.length - 1);
+				if (document.getElementById(id+"-card") == null) {
+					$("#suggestions").append('<div class="col s12 m6 l4" id="'+id+'-card">'
+						                     + '<div class="card">'
+						                      + '<div class="card-content">'
+						                       + '<span class="card-title purple-text">'+title+'</span>'
+						                       + '<p>You seem to misspell the follow words frequently in your writing, the topmost ones being the most revealing. Try finding these misspellings and fixing them in the document you want to anonymize:</p>'
+						                       + '<ul id="'+id+'-list">'
+						                        + '<li style="font-weight:'+fontWeight+';">' + feature + '</li>'
+						                       + '</ul>'
+						                      + '</div>'
+						                     + '</div>');
+				} else {
+					$("#"+id+"-list").append('<li style="font-weight:'+fontWeight+';">' + feature + '</li>');
+				}
+			}
+
+			$('.distribution-trigger').leanModal();
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+============================ JStylo Analysis Output ============================
+Started analysis on 2016-04-01, 16:21:38
+Running test documents classification
+
+Training corpus:
+> Marc (3 documents)
+> a (7 documents)
+> b (7 documents)
+> c (9 documents)
+> cm (11 documents)
+> d (9 documents)
+> e (9 documents)
+> f (9 documents)
+> g (8 documents)
+> h (8 documents)
+> k (9 documents)
+> m (8 documents)
+> p (10 documents)
+> s (9 documents)
+
+Test documents:
+> _Unknown_ (1 documents)
+
+Feature set: WritePrints (Limited):
+> Character count
+> Average characters per word
+> Letters
+> Top Letter bigrams
+> Top Letter trigrams
+> Digits Percentage
+> Letters Percentage
+> Uppercase Letters Percentage
+> Digits
+> Two Digit Numbers
+> Three Digit Numbers
+> Word Lengths
+> Special Characters
+> Function Words
+> Punctuation
+> POS Tags
+> POS Bigrams
+> POS Trigrams
+> Words
+> Word Bigrams
+> Word Trigrams
+> Misspelled Words
+
+Analyzers used:
+> edu.drexel.psal.jstylo.analyzers.WekaAnalyzer     	-C 1.0 -L 0.001 -P 1.0E-12 -N 0 -V -1 -W 1 -K weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0 
+
+================================================================================
+
+2016-04-01, 16:21:38 Extracting features from training corpus (using sparse representation)...
+2016-04-01, 16:21:59 done!
+
+2016-04-01, 16:21:59 Building relevant event set...2016-04-01, 16:22:00 done!
+
+2016-04-01, 16:22:00 Building attributes list...2016-04-01, 16:22:00 done!
+
+2016-04-01, 16:22:00 Creating training instances...2016-04-01, 16:22:01 done!
+
+2016-04-01, 16:22:01 Extracting features from test documents (using sparse representation)...
+2016-04-01, 16:22:02 done!
+
+Calculating InfoGain on the training set's features
+===================================================
+> POS-Bigrams{(NN)-(,)}                                2.477444
+> Letters{h}                                           2.460540
+> POS-Tags{PRP}                                        2.361304
+> Top-Letter-bigrams{er}                               2.342310
+> Average characters per word                          2.324052
+> Top-Letter-bigrams{on}                               2.324052
+> POS-Trigrams{(NN)-(.)-(PRP)}                         2.319165
+> Top-Letter-trigrams{ent}                             2.295277
+> Letters{v}                                           2.214152
+> Top-Letter-trigrams{ati}                             2.117155
+> Digits{1}                                            2.103143
+> Word-Lengths{8}                                      2.083494
+> Top-Letter-trigrams{tha}                             2.068538
+> Letters{c}                                           2.067095
+> Top-Letter-bigrams{io}                               2.038173
+> POS-Bigrams{(IN)-(PRP)}                              2.030733
+> Top-Letter-bigrams{en}                               2.024255
+> Word-Lengths{10}                                     1.991242
+> Letters{i}                                           1.987002
+> POS-Trigrams{(DT)-(NN)-(.)}                          1.964415
+> Character count                                      1.924924
+> POS-Bigrams{(.)-(PRP)}                               1.910259
+> POS-Tags{IN}                                         1.903929
+> POS-Bigrams{(JJ)-(NN)}                               1.819791
+> Letters{p}                                           1.816853
+> POS-Tags{``}                                         1.803897
+> POS-Tags{''}                                         1.803897
+> POS-Tags{RP}                                         1.795062
+> Letters{n}                                           1.789232
+> Top-Letter-bigrams{or}                               1.786993
+> Function-Words{this}                                 1.786993
+> Words{this}                                          1.786993
+> Top-Letter-trigrams{ion}                             1.757519
+> POS-Trigrams{(IN)-(PRP$)-(NN)}                       1.749539
+> POS-Tags{PRP$}                                       1.736280
+> POS-Tags{MD}                                         1.732635
+> Letters{a}                                           1.725300
+> Top-Letter-bigrams{ti}                               1.720166
+> Word-Lengths{12}                                     1.706604
+> Function-Words{the}                                  1.701123
+> Words{the}                                           1.701123
+> Top-Letter-bigrams{ic}                               1.681922
+> Function-Words{he}                                   1.676441
+> Words{he}                                            1.676441
+> Top-Letter-trigrams{ons}                             1.659537
+> POS-Bigrams{(NN)-(NN)}                               1.658574
+> POS-Bigrams{(NN)-(.)}                                1.657542
+> POS-Tags{NNP}                                        1.650749
+> Letters Percentage                                   1.639878
+> Top-Letter-bigrams{ed}                               1.621275
+> POS-Tags{,}                                          1.585072
+> POS-Trigrams{(IN)-(DT)-(NN)}                         1.585072
+> Letters{f}                                           1.580097
+> Top-Letter-trigrams{iti}                             1.577544
+> Function-Words{his}                                  1.560639
+> Words{his}                                           1.560639
+> Letters{o}                                           1.560639
+> Top-Letter-trigrams{tio}                             1.551513
+> Word-Lengths{4}                                      1.551418
+> Top-Letter-trigrams{act}                             1.518851
+> Letters{q}                                           1.516167
+> Word-Lengths{13}                                     1.516167
+> POS-Trigrams{(NN)-(NN)-(.)}                          1.503739
+> Top-Letter-bigrams{ly}                               1.503597
+> Letters{u}                                           1.500853
+> Digits{9}                                            1.483795
+> POS-Bigrams{(PRP)-(VBP)}                             1.457764
+> POS-Tags{RB}                                         1.454321
+> Letters{r}                                           1.445758
+> Letters{w}                                           1.445295
+> Top-Letter-bigrams{nt}                               1.445295
+> POS-Tags{-LRB-}                                      1.399825
+> POS-Tags{-RRB-}                                      1.399825
+> Uppercase Letters Percentage                         1.398662
+> POS-Bigrams{(MD)-(VB)}                               1.387046
+> Top-Letter-bigrams{li}                               1.385218
+> Top-Letter-bigrams{es}                               1.384108
+> Top-Letter-trigrams{con}                             1.380920
+> POS-Tags{NN}                                         1.380920
+> Top-Letter-bigrams{be}                               1.376793
+> Top-Letter-trigrams{hat}                             1.370903
+> POS-Bigrams{(IN)-(JJ)}                               1.369662
+> POS-Trigrams{(NN)-(IN)-(JJ)}                         1.358434
+> Function-Words{was}                                  1.349051
+> Words{was}                                           1.349051
+> Letters{s}                                           1.341630
+> Top-Letter-bigrams{me}                               1.336192
+> Top-Letter-bigrams{of}                               1.336192
+> POS-Trigrams{(IN)-(JJ)-(NNS)}                        1.318081
+> Word-Bigrams{(out)-(of)}                             1.311954
+> POS-Trigrams{(JJ)-(JJ)-(NN)}                         1.300696
+> POS-Tags{:}                                          1.290222
+> POS-Tags{POS}                                        1.277890
+> POS-Trigrams{(IN)-(JJ)-(NN)}                         1.277890
+> Digits{2}                                            1.265634
+> Top-Letter-bigrams{al}                               1.263544
+> Top-Letter-trigrams{tic}                             1.263544
+> Top-Letter-bigrams{ou}                               1.254311
+> POS-Bigrams{(IN)-(PRP$)}                             1.238144
+> Top-Letter-trigrams{eve}                             1.217016
+> POS-Bigrams{(IN)-(NNP)}                              1.205226
+> Top-Letter-trigrams{for}                             1.196668
+> POS-Bigrams{(PRP)-(VBZ)}                             1.183208
+> Function-Words{i}                                    1.176220
+> Words{i}                                             1.176220
+> POS-Trigrams{(JJ)-(NN)-(,)}                          1.164292
+> Function-Words{that}                                 1.132181
+> Words{that}                                          1.132181
+> Digits Percentage                                    1.130738
+> Letters{l}                                           1.126243
+> POS-Bigrams{(JJ)-(JJ)}                               1.109594
+> Letters{e}                                           1.073552
+> Word-Lengths{11}                                     1.073552
+> POS-Tags{JJ}                                         1.073552
+> Word-Lengths{2}                                      1.063432
+> POS-Bigrams{(,)-(CC)}                                1.044078
+> Top-Letter-trigrams{ere}                             1.044078
+> Word-Lengths{9}                                      0.999142
+> POS-Bigrams{(NN)-(IN)}                               0.999142
+> Word-Bigrams{(i)-(am)}                               0.935621
+> Top-Letter-bigrams{te}                               0.930177
+> POS-Tags{NNS}                                        0.929364
+> Function-Words{but}                                  0.925501
+> Words{but}                                           0.925501
+> Word-Bigrams{(to)-(be)}                              0.925501
+> Letters{j}                                           0.909484
+> Word-Lengths{6}                                      0.909484
+> Function-Words{also}                                 0.909484
+> POS-Tags{VB}                                         0.909484
+> POS-Bigrams{(.)-(DT)}                                0.909484
+> POS-Trigrams{(NN)-(.)-(DT)}                          0.909484
+> Words{also}                                          0.909484
+> Misspelled-Words{it's}                               0.909484
+> POS-Trigrams{(PRP)-(MD)-(VB)}                        0.897271
+> POS-Tags{CD}                                         0.893571
+> Function-Words{of}                                   0.888588
+> Words{of}                                            0.888588
+> POS-Bigrams{(JJ)-(NNS)}                              0.861211
+> POS-Bigrams{(PRP$)-(NN)}                             0.861211
+> Top-Letter-trigrams{ate}                             0.860398
+> Digits{0}                                            0.860398
+> Function-Words{on}                                   0.860398
+> Words{on}                                            0.860398
+> Top-Letter-bigrams{co}                               0.854336
+> POS-Bigrams{(IN)-(DT)}                               0.854336
+> POS-Tags{.}                                          0.840518
+> POS-Tags{WP}                                         0.840518
+> Top-Letter-trigrams{res}                             0.840518
+> Word-Lengths{14}                                     0.840518
+> Function-Words{more}                                 0.840518
+> POS-Bigrams{(NNP)-(NNP)}                             0.840518
+> POS-Trigrams{(NN)-(IN)-(NNP)}                        0.840518
+> Words{more}                                          0.840518
+> Top-Letter-trigrams{his}                             0.828305
+> Top-Letter-bigrams{ro}                               0.824606
+> Top-Letter-bigrams{th}                               0.824606
+> POS-Bigrams{(PRP)-(MD)}                              0.824606
+> Top-Letter-bigrams{om}                               0.824606
+> POS-Bigrams{(VBZ)-(RB)}                              0.824606
+> Top-Letter-trigrams{nce}                             0.819622
+> Function-Words{not}                                  0.819622
+> POS-Tags{VBP}                                        0.819622
+> Words{not}                                           0.819622
+> Function-Words{we}                                   0.793592
+> Words{we}                                            0.793592
+> Letters{d}                                           0.791433
+> POS-Bigrams{(CC)-(JJ)}                               0.791433
+> Top-Letter-trigrams{pro}                             0.791433
+> Top-Letter-trigrams{sta}                             0.791433
+> Two-Digit-Numbers{30}                                0.791433
+> POS-Bigrams{(NN)-(NNS)}                              0.791433
+> Special-Characters{-}                                0.785370
+> Word-Bigrams{(in)-(his)}                             0.785370
+> Top-Letter-bigrams{ha}                               0.780786
+> Function-Words{to}                                   0.780786
+> POS-Tags{TO}                                         0.780786
+> POS-Trigrams{(NN)-(CC)-(NN)}                         0.780786
+> Words{to}                                            0.780786
+> Function-Words{in}                                   0.755640
+> POS-Bigrams{(RB)-(VB)}                               0.755640
+> Words{in}                                            0.755640
+> Letters{z}                                           0.728361
+> Top-Letter-bigrams{it}                               0.728361
+> Word-Bigrams{(that)-(the)}                           0.728361
+> Word-Trigrams{(top)-(of)-(the)}                      0.663197
+done!
+
+2016-04-01, 16:22:02 Starting training and testing phase...
+
+================================================================================
+
+Running analysis with Analyzer 1 out of 1:
+> Classifier: weka.classifiers.functions.SMO
+> Options:    -C 1.0 -L 0.001 -P 1.0E-12 -N 0 -V -1 -W 1 -K weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0 
+
+2016-04-01, 16:22:02 Starting classification...
+2016-04-01, 16:22:03 done!
+
+Results:
+========
+doc \ author   | _Unknown_      | Marc           | a              | b              | c              | cm             | d              | e              | f              | g              | h              | k              | m              | p              | s              |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+docToTest.md   | 0.000000       | 0.133333 +     | 0.085714       | 0.095238       | 0.028571       | 0.009524       | 0.114286       | 0.019048       | 0.123810       | 0.104762       | 0.057143       | 0.047619       | 0.066667       | 0.038095       | 0.076190       |
+

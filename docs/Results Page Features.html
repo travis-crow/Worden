@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>.codehilite pre .hll { background-color: #ffffcc }
+.codehilite pre  { background: #f8f8f8; }
+.codehilite pre .c { color: #008800; font-style: italic } /* Comment */
+.codehilite pre .err { border: 1px solid #FF0000 } /* Error */
+.codehilite pre .k { color: #AA22FF; font-weight: bold } /* Keyword */
+.codehilite pre .o { color: #666666 } /* Operator */
+.codehilite pre .ch { color: #008800; font-style: italic } /* Comment.Hashbang */
+.codehilite pre .cm { color: #008800; font-style: italic } /* Comment.Multiline */
+.codehilite pre .cp { color: #008800 } /* Comment.Preproc */
+.codehilite pre .c1 { color: #008800; font-style: italic } /* Comment.Single */
+.codehilite pre .cs { color: #008800; font-weight: bold } /* Comment.Special */
+.codehilite pre .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite pre .ge { font-style: italic } /* Generic.Emph */
+.codehilite pre .gr { color: #FF0000 } /* Generic.Error */
+.codehilite pre .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite pre .gi { color: #00A000 } /* Generic.Inserted */
+.codehilite pre .go { color: #888888 } /* Generic.Output */
+.codehilite pre .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.codehilite pre .gs { font-weight: bold } /* Generic.Strong */
+.codehilite pre .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite pre .gt { color: #0044DD } /* Generic.Traceback */
+.codehilite pre .kc { color: #AA22FF; font-weight: bold } /* Keyword.Constant */
+.codehilite pre .kd { color: #AA22FF; font-weight: bold } /* Keyword.Declaration */
+.codehilite pre .kn { color: #AA22FF; font-weight: bold } /* Keyword.Namespace */
+.codehilite pre .kp { color: #AA22FF } /* Keyword.Pseudo */
+.codehilite pre .kr { color: #AA22FF; font-weight: bold } /* Keyword.Reserved */
+.codehilite pre .kt { color: #00BB00; font-weight: bold } /* Keyword.Type */
+.codehilite pre .m { color: #666666 } /* Literal.Number */
+.codehilite pre .s { color: #BB4444 } /* Literal.String */
+.codehilite pre .na { color: #BB4444 } /* Name.Attribute */
+.codehilite pre .nb { color: #AA22FF } /* Name.Builtin */
+.codehilite pre .nc { color: #0000FF } /* Name.Class */
+.codehilite pre .no { color: #880000 } /* Name.Constant */
+.codehilite pre .nd { color: #AA22FF } /* Name.Decorator */
+.codehilite pre .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.codehilite pre .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.codehilite pre .nf { color: #00A000 } /* Name.Function */
+.codehilite pre .nl { color: #A0A000 } /* Name.Label */
+.codehilite pre .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.codehilite pre .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.codehilite pre .nv { color: #B8860B } /* Name.Variable */
+.codehilite pre .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.codehilite pre .w { color: #bbbbbb } /* Text.Whitespace */
+.codehilite pre .mb { color: #666666 } /* Literal.Number.Bin */
+.codehilite pre .mf { color: #666666 } /* Literal.Number.Float */
+.codehilite pre .mh { color: #666666 } /* Literal.Number.Hex */
+.codehilite pre .mi { color: #666666 } /* Literal.Number.Integer */
+.codehilite pre .mo { color: #666666 } /* Literal.Number.Oct */
+.codehilite pre .sb { color: #BB4444 } /* Literal.String.Backtick */
+.codehilite pre .sc { color: #BB4444 } /* Literal.String.Char */
+.codehilite pre .sd { color: #BB4444; font-style: italic } /* Literal.String.Doc */
+.codehilite pre .s2 { color: #BB4444 } /* Literal.String.Double */
+.codehilite pre .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.codehilite pre .sh { color: #BB4444 } /* Literal.String.Heredoc */
+.codehilite pre .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.codehilite pre .sx { color: #008000 } /* Literal.String.Other */
+.codehilite pre .sr { color: #BB6688 } /* Literal.String.Regex */
+.codehilite pre .s1 { color: #BB4444 } /* Literal.String.Single */
+.codehilite pre .ss { color: #B8860B } /* Literal.String.Symbol */
+.codehilite pre .bp { color: #AA22FF } /* Name.Builtin.Pseudo */
+.codehilite pre .vc { color: #B8860B } /* Name.Variable.Class */
+.codehilite pre .vg { color: #B8860B } /* Name.Variable.Global */
+.codehilite pre .vi { color: #B8860B } /* Name.Variable.Instance */
+.codehilite pre .il { color: #666666 } /* Literal.Number.Integer.Long */</style><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+MathJax.Hub.Config({
+  config: ["MMLorHTML.js"],
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX"],
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: false
+  },
+  TeX: {
+    extensions: ["AMSmath.js", "AMSsymbols.js"],
+    TagSide: "right",
+    TagIndent: ".8em",
+    MultLineWidth: "85%",
+    equationNumbers: {
+      autoNumber: "AMS",
+    },
+    unicode: {
+      fonts: "STIXGeneral,'Arial Unicode MS'"
+    }
+  },
+  showProcessingMessages: false
+});
+</script>
+<title>Features</title>
+    <style>h2,h3,h4,li,main,p{position:relative}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}body,html{margin:0;padding:0}.codehilite pre{border:1px solid #CCC;border-radius:3px;padding:.2em .5em}body{font-family:palatino,georgia,serif;font-size:20px;background-color:#fcfcfc;color:#272727;line-height:1.5em;width:700px;margin:2em auto 4em}main{overflow-x:hidden;padding-top:1px}code{font-size:.9em;white-space:nowrap}pre{overflow:auto;background-color:transparent;border:0;padding:0;font-size:16px;margin:0;line-height:1.4em}pre code{color:#93a1a1;white-space:pre;font-size:1em}h1,h2,h3,h4{font-family:adelle-sans,sans-serif;font-weight:700;color:#343434}h1{margin-bottom:6px;font-size:33px;line-height:40px}h2{font-size:27px}h3{font-size:23px}h4{font-size:20px}a,a:active{color:#008024;-webkit-transition:color .2s linear;transition:color .2s linear;text-decoration:underline}a:hover{color:#00CC39}button{font-size:18px}footer{border-top:1px solid #f0f0f0}@media screen and (max-width:900px){body{width:auto;margin:2em 1em}}@media screen and (max-width:500px){body{margin:1em}}img{max-width:100%;margin:0 auto;display:block}p{margin:30px 0}h2,h3,h4{padding-left:1.25em;margin-left:-1.25em;margin-top:2em}h2 .text-anchor,h3 .text-anchor,h4 .text-anchor{display:none}h2:hover .text-anchor,h3:hover .text-anchor,h4:hover .text-anchor{display:block}hr{border:none;height:1px;background:#CCC;background:-moz-linear-gradient(left,#FCFCFC 0,#CCC 25%,#CCC 50%,#CCC 75%,#FCFCFC 100%);background:-webkit-gradient(linear,left top,right top,color-stop(0,#FCFCFC),color-stop(25%,#CCC),color-stop(50%,#CCC),color-stop(75%,#CCC),color-stop(100%,#FCFCFC));background:-webkit-linear-gradient(left,#FCFCFC 0,#CCC 25%,#CCC 50%,#CCC 75%,#FCFCFC 100%);background:-o-linear-gradient(left,#FCFCFC 0,#CCC 25%,#CCC 50%,#CCC 75%,#FCFCFC 100%);background:-ms-linear-gradient(left,#FCFCFC 0,#CCC 25%,#CCC 50%,#CCC 75%,#FCFCFC 100%);background:linear-gradient(to right,#FCFCFC 0,#CCC 25%,#CCC 50%,#CCC 75%,#FCFCFC 100%);filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#FCFCFC', endColorstr='#FCFCFC', GradientType=1 );margin:3em 0}</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <h1 id="worden-results-page-cards"><a name="user-content-worden-results-page-cards" href="#worden-results-page-cards" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Worden Results Page Cards</h1>
+<ol>
+<li><a href="#1">Numbers</a></li>
+<li><a href="#2">Unique Characters</a></li>
+<li><a href="#3">Words and Word Combinations</a></li>
+<li><a href="#4">Letters and Letter Combinations</a></li>
+<li><a href="#5">Word Lengths</a></li>
+<li><a href="#6">Misspelled Words</a></li>
+<li><a href="#7">Function Words</a></li>
+<li><a href="#8">Punctuation</a></li>
+<li><a href="#9">Part-Of-Speech Combinations</a></li>
+</ol>
+<h2 id="numbers"><a name="user-content-numbers" href="#numbers" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="1"></a>Numbers</h2>
+<p>Features: Digits, Two Digit Numbers, Three Digit Numbers</p>
+<p>Sample result values:</p>
+<div class="codehilite"><pre>&gt; Digits{7}                                            0.262047
+&gt; Two-Digit-Numbers{85}                                0.306686
+&gt; Three-Digit-Numbers{770}                             0.300095
+&gt; Three-Digit-Numbers{349}                             0.269543
+&gt; Two-Digit-Numbers{34}                                0.248905
+&gt; Two-Digit-Numbers{71}                                0.232430
+&gt; Three-Digit-Numbers{646}                             0.228189
+&gt; Three-Digit-Numbers{140}                             0.227369
+&gt; Two-Digit-Numbers{90}                                0.224807
+&gt; Two-Digit-Numbers{38}                                0.222736
+&gt; Two-Digit-Numbers{77}                                0.221470
+&gt; Two-Digit-Numbers{64}                                0.221134
+&gt; Three-Digit-Numbers{380}                             0.167875
+&gt; Three-Digit-Numbers{562}                             0.160287
+&gt; Two-Digit-Numbers{56}                                0.143559
+
+&gt; Digits{1}                                            2.103143
+&gt; Digits{9}                                            1.483795
+&gt; Digits{2}                                            1.265634
+&gt; Digits Percentage                                    1.130738
+&gt; Digits{0}                                            0.860398
+&gt; Two-Digit-Numbers{30}                                0.791433
+</pre></div>
+
+
+<hr />
+<p>You seem to use <code>N</code> a lot in your writing, try removing as many of these as you can by generalizing and/or converting to their written form where possible in the document you want to anonymize.</p>
+<p>You seem to use <strong><code>N1</code></strong> and <code>N2</code> a lot in your writing, <code>N1</code> the most. Try removing as many of these as you can by generalizing them away, referring to them by pronouns, or converting them to their written form where possible in the document you want to anonymize.</p>
+<p>You seem to use the following numbers a lot in your writing, the topmost ones being the most revealing. Try removing as many of them as you can by generalizing them away, referring to them by pronouns, or converting them to their written form where possible in the document you want to anonymize.</p>
+<ol>
+<li><code>N1</code></li>
+<li><code>N2</code></li>
+<li><code>N3</code></li>
+</ol>
+<p>Examples:</p>
+<ul>
+<li>&ldquo;I have 7 apples.&rdquo; to &ldquo;I have many apples.&rdquo;</li>
+<li>&ldquo;I got 7 questions right&rdquo; to &ldquo;I got seven questions right&rdquo;</li>
+<li>&ldquo;I had 7 apples. 7 Apples is a lot!&rdquo; to &ldquo;I have 7 apples. That&rsquo;s a lot!&rdquo;</li>
+</ul>
+<hr />
+<div class="codehilite"><pre>&lt;feature name=&quot;Digits&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequency of digits in the document (0,1,...,9).&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.RegexpEventDriver&quot;&gt;
+        &lt;param name=&quot;regexp&quot; value=&quot;\d&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+
+&lt;feature name=&quot;Two Digit Numbers&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequencies of 2 digit numbers (e.g. 11, 99 etc.).&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.RegexpEventDriver&quot;&gt;
+        &lt;param name=&quot;regexp&quot; value=&quot;\d\d&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+
+&lt;feature name=&quot;Three Digit Numbers&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequencies of 3 digit numbers (e.g. 100, 209 etc.).&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.RegexpEventDriver&quot;&gt;
+        &lt;param name=&quot;regexp&quot; value=&quot;\d\d\d&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+</pre></div>
+
+
+<h2 id="unique-characters"><a name="user-content-unique-characters" href="#unique-characters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="2"></a>Unique Characters</h2>
+<p>Features: Special Characters</p>
+<p>Sample result values:</p>
+<div class="codehilite"><pre>&gt; Special-Characters{&gt;}                                0.163322
+
+&gt; Special-Characters{-}                                0.785370
+</pre></div>
+
+
+<hr />
+<p>You seem to use the special character <code>C</code> frequently in your writing. Try avoiding this or removing extrenous uses where possible in the document you want to anonymize.</p>
+<p>You seem to use the special characters <strong><code>C1</code></strong> and <code>C2</code> frequently in your writing, <code>C1</code> the most. Try avoiding these or removing extrenous uses where possible in the document you want to anonymize.</p>
+<p>You seem to use the following special characters a lot in your writing, the topmost ones being the most revealing. Try avoiding them or removing extrenous uses of them where possible in the document you want to anonymize.</p>
+<ol>
+<li><code>C1</code></li>
+<li><code>C2</code></li>
+<li><code>C3</code></li>
+</ol>
+<hr />
+<div class="codehilite"><pre>&lt;feature name=&quot;Special Characters&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequencies of special characters, e.g. ~, @ etc.&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.ListEventDriver&quot;&gt;
+        &lt;param name=&quot;sort&quot; value=&quot;false&quot;/&gt;
+        &lt;param name=&quot;whiteList&quot; value=&quot;true&quot;/&gt;
+        &lt;param name=&quot;keepLexiconInMem&quot; value=&quot;false&quot;/&gt;
+        &lt;param name=&quot;underlyingEvents&quot; value=&quot;Words&quot;/&gt;
+        &lt;param name=&quot;filename&quot; value=&quot;edu/drexel/psal/resources/writeprints_special_chars.txt&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+</pre></div>
+
+
+<h2 id="words-and-word-combinations"><a name="user-content-words-and-word-combinations" href="#words-and-word-combinations" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="3"></a>Words and Word Combinations</h2>
+<p>Features: Words, Word Bigrams, Word Trigrams</p>
+<p>Sample result values:</p>
+<div class="codehilite"><pre>&gt; Word-Trigrams{(north)-(america)-(corp)}              0.273847
+&gt; Word-Trigrams{(enron)-(north)-(america)}             0.272917
+&gt; Word-Trigrams{(corp)-(1400)-(smith)}                 0.234549
+&gt; Word-Trigrams{(america)-(corp)-(1400)}               0.233689
+&gt; Word-Trigrams{(1400)-(smith)-(street)}               0.227369
+&gt; Word-Trigrams{(smith)-(street)-(eb)}                 0.227369
+&gt; Word-Trigrams{(houston)-(texas)-(77002)}             0.227369
+&gt; Word-Trigrams{(sara)-(shackleton)-(enron)}           0.141441
+&gt; Word-Trigrams{(shackleton)-(enron)-(north)}          0.141441
+&gt; Word-Trigrams{(street)-(eb)-(3801a)}                 0.141441
+&gt; Word-Trigrams{(eb)-(3801a)-(houston)}                0.141441
+&gt; Word-Trigrams{(3801a)-(houston)-(texas)}             0.141441
+&gt; Word-Trigrams{(sara)-(shackleton@enron)-(com)}       0.141441
+&gt; Word-Bigrams{(enron)-(north)}                        0.273818
+&gt; Word-Bigrams{(north)-(america)}                      0.272126
+&gt; Word-Bigrams{(america)-(corp)}                       0.271477
+
+&gt; Words{this}                                          1.786993
+&gt; Words{the}                                           1.701123
+&gt; Words{he}                                            1.676441
+&gt; Words{his}                                           1.560639
+&gt; Words{was}                                           1.349051
+&gt; Words{i}                                             1.176220
+&gt; Words{that}                                          1.132181
+&gt; Words{but}                                           0.925501
+&gt; Words{also}                                          0.909484
+&gt; Words{of}                                            0.888588
+&gt; Words{on}                                            0.860398
+&gt; Words{more}                                          0.840518
+&gt; Words{not}                                           0.819622
+&gt; Words{we}                                            0.793592
+&gt; Words{to}                                            0.780786
+&gt; Words{in}                                            0.755640
+&gt; Word-Bigrams{(out)-(of)}                             1.311954
+&gt; Word-Bigrams{(i)-(am)}                               0.935621
+&gt; Word-Bigrams{(to)-(be)}                              0.925501
+&gt; Word-Bigrams{(in)-(his)}                             0.785370
+&gt; Word-Bigrams{(that)-(the)}                           0.728361
+&gt; Word-Trigrams{(top)-(of)-(the)}                      0.663197
+</pre></div>
+
+
+<hr />
+<p>You seem to use the word combination &ldquo;W1 W2&rdquo; frequently in your writing. Try rewording this phrase or avoiding it entirely in the document you want to anonymize.</p>
+<p>You seem to use the word combinations <strong>&ldquo;W1 W2&rdquo;</strong> and &ldquo;W9 W8 W7&rdquo; frequently in your writing, &ldquo;W1 W2&rdquo; the most. Try rewording these phrases or avoiding them entirely in the document you want to anonymize.</p>
+<p>You seem to use the following word combinations frequently in your writing, the topmost ones being the most revealing. Try rewording these phrases or avoiding them entirely in the document you want to anonymize.</p>
+<ol>
+<li>&ldquo;W1 W2&rdquo;</li>
+<li>&ldquo;W9 W8 W7&rdquo;</li>
+<li>&ldquo;W5 W6&rdquo;</li>
+</ol>
+<hr />
+<div class="codehilite"><pre>&lt;feature name=&quot;Words&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequencies of various words in the text, case insensitive and without punctuations.&quot;/&gt;
+    &lt;event-driver class=&quot;com.jgaap.eventDrivers.NaiveWordEventDriver&quot;&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;com.jgaap.canonicizers.UnifyCase&quot;&gt;
+        &lt;/canonicizer&gt;
+        &lt;canonicizer class=&quot;edu.drexel.psal.jstylo.canonicizers.StripEdgesPunctuation&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+        &lt;culler class=&quot;edu.drexel.psal.jstylo.eventCullers.MostCommonEventsExtended&quot;&gt;
+            &lt;param name=&quot;N&quot; value=&quot;50&quot;/&gt;
+        &lt;/culler&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+
+&lt;feature name=&quot;Word Bigrams&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequencies of various word bigrams in the text, case insensitive and without punctuations.&quot;/&gt;
+    &lt;event-driver class=&quot;com.jgaap.eventDrivers.WordNGramEventDriver&quot;&gt;
+        &lt;param name=&quot;N&quot; value=&quot;2&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;com.jgaap.canonicizers.UnifyCase&quot;&gt;
+        &lt;/canonicizer&gt;
+        &lt;canonicizer class=&quot;edu.drexel.psal.jstylo.canonicizers.StripEdgesPunctuation&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+        &lt;culler class=&quot;edu.drexel.psal.jstylo.eventCullers.MostCommonEventsExtended&quot;&gt;
+            &lt;param name=&quot;N&quot; value=&quot;50&quot;/&gt;
+        &lt;/culler&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+
+&lt;feature name=&quot;Word Trigrams&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequencies of various word trigrams in the text, case insensitive and without punctuations.&quot;/&gt;
+    &lt;event-driver class=&quot;com.jgaap.eventDrivers.WordNGramEventDriver&quot;&gt;
+        &lt;param name=&quot;N&quot; value=&quot;3&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;com.jgaap.canonicizers.UnifyCase&quot;&gt;
+        &lt;/canonicizer&gt;
+        &lt;canonicizer class=&quot;edu.drexel.psal.jstylo.canonicizers.StripEdgesPunctuation&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+        &lt;culler class=&quot;edu.drexel.psal.jstylo.eventCullers.MostCommonEventsExtended&quot;&gt;
+            &lt;param name=&quot;N&quot; value=&quot;50&quot;/&gt;
+        &lt;/culler&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+</pre></div>
+
+
+<h2 id="letters-and-letter-combinations"><a name="user-content-letters-and-letter-combinations" href="#letters-and-letter-combinations" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="4"></a>Letters and Letter Combinations</h2>
+<p>Features: Letters, Top Letter bigrams, Top Letter trigrams</p>
+<p>Sample result values:</p>
+<div class="codehilite"><pre>&gt; Letters{h}                                           2.460540
+&gt; Letters{v}                                           2.214152
+&gt; Letters{c}                                           2.067095
+&gt; Letters{i}                                           1.987002
+&gt; Letters{p}                                           1.816853
+&gt; Letters{n}                                           1.789232
+&gt; Letters{a}                                           1.725300
+&gt; Letters{f}                                           1.580097
+&gt; Letters{o}                                           1.560639
+&gt; Letters{q}                                           1.516167
+&gt; Letters{u}                                           1.500853
+&gt; Letters{r}                                           1.445758
+&gt; Letters{w}                                           1.445295
+&gt; Letters{s}                                           1.341630
+&gt; Letters{l}                                           1.126243
+&gt; Letters{e}                                           1.073552
+&gt; Letters{j}                                           0.909484
+&gt; Letters{d}                                           0.791433
+&gt; Letters{z}                                           0.728361
+&gt; Top-Letter-bigrams{er}                               2.342310
+&gt; Top-Letter-bigrams{on}                               2.324052
+&gt; Top-Letter-bigrams{io}                               2.038173
+&gt; Top-Letter-bigrams{en}                               2.024255
+&gt; Top-Letter-bigrams{or}                               1.786993
+&gt; Top-Letter-bigrams{ti}                               1.720166
+&gt; Top-Letter-bigrams{ic}                               1.681922
+&gt; Top-Letter-bigrams{ed}                               1.621275
+&gt; Top-Letter-bigrams{ly}                               1.503597
+&gt; Top-Letter-bigrams{nt}                               1.445295
+&gt; Top-Letter-bigrams{li}                               1.385218
+&gt; Top-Letter-bigrams{es}                               1.384108
+&gt; Top-Letter-bigrams{be}                               1.376793
+&gt; Top-Letter-bigrams{me}                               1.336192
+&gt; Top-Letter-bigrams{of}                               1.336192
+&gt; Top-Letter-bigrams{al}                               1.263544
+&gt; Top-Letter-bigrams{ou}                               1.254311
+&gt; Top-Letter-bigrams{te}                               0.930177
+&gt; Top-Letter-bigrams{co}                               0.854336
+&gt; Top-Letter-bigrams{ro}                               0.824606
+&gt; Top-Letter-bigrams{th}                               0.824606
+&gt; Top-Letter-bigrams{om}                               0.824606
+&gt; Top-Letter-bigrams{ha}                               0.780786
+&gt; Top-Letter-bigrams{it}                               0.728361
+&gt; Top-Letter-trigrams{ent}                             2.295277
+&gt; Top-Letter-trigrams{ati}                             2.117155
+&gt; Top-Letter-trigrams{tha}                             2.068538
+&gt; Top-Letter-trigrams{ion}                             1.757519
+&gt; Top-Letter-trigrams{ons}                             1.659537
+&gt; Top-Letter-trigrams{iti}                             1.577544
+&gt; Top-Letter-trigrams{tio}                             1.551513
+&gt; Top-Letter-trigrams{act}                             1.518851
+&gt; Top-Letter-trigrams{con}                             1.380920
+&gt; Top-Letter-trigrams{hat}                             1.370903
+&gt; Top-Letter-trigrams{tic}                             1.263544
+&gt; Top-Letter-trigrams{eve}                             1.217016
+&gt; Top-Letter-trigrams{for}                             1.196668
+&gt; Top-Letter-trigrams{ere}                             1.044078
+&gt; Top-Letter-trigrams{ate}                             0.860398
+&gt; Top-Letter-trigrams{res}                             0.840518
+&gt; Top-Letter-trigrams{his}                             0.828305
+&gt; Top-Letter-trigrams{nce}                             0.819622
+&gt; Top-Letter-trigrams{pro}                             0.791433
+&gt; Top-Letter-trigrams{sta}                             0.791433
+</pre></div>
+
+
+<hr />
+<p>You seem to use the letter combination &ldquo;h&rdquo; frequently in your writing. Try searching your document to anonymize for this combination and substituting the words they occur in with other words that doesn&rsquo;t have the combination or rephrasing the sentence to change the word used.</p>
+<p>You seem to use the letter combinations <strong>&ldquo;h&rdquo;</strong> and &ldquo;ing&rdquo; frequently in your writing, &ldquo;ab&rdquo; the most. Try searching your document to anonymize for these combinations and substituting the words they occur in with other words that don&rsquo;t have the combination or rephrasing the sentence to change the word used.</p>
+<p>You seem to use the following letter combinations frequently in your writing, the topmost ones being the most revealing. Try searching your document to anonymize for these combinations and substituting the words they occur in with other words that don&rsquo;t have the combination or rephrasing the sentence to change the word used.</p>
+<ol>
+<li>&ldquo;h&rdquo;</li>
+<li>&ldquo;ing&rdquo;</li>
+<li>&ldquo;be&rdquo;</li>
+</ol>
+<p>Example: For the frequent letter combination &ldquo;ing&rdquo;, &ldquo;He was <strong>running</strong> because he was late&rdquo; could be changed to &ldquo;He ran because he was late&rdquo;, eliminating the need for &ldquo;ing&rdquo;.</p>
+<hr />
+<div class="codehilite"><pre>&lt;feature name=&quot;Letters&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequency of letters (a-z, case insensitive).&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.LetterNGramEventDriver&quot;&gt;
+        &lt;param name=&quot;N&quot; value=&quot;1&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;com.jgaap.canonicizers.UnifyCase&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+
+&lt;feature name=&quot;Top Letter bigrams&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Most common letter bigrams (e.g. aa, ab etc.), case insensitive. Bigrams are taken only within words (do not cross adjacent words).&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.LetterNGramEventDriver&quot;&gt;
+        &lt;param name=&quot;N&quot; value=&quot;2&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;com.jgaap.canonicizers.UnifyCase&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+        &lt;culler class=&quot;edu.drexel.psal.jstylo.eventCullers.MostCommonEventsExtended&quot;&gt;
+            &lt;param name=&quot;N&quot; value=&quot;50&quot;/&gt;
+        &lt;/culler&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+
+&lt;feature name=&quot;Top Letter trigrams&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Most common letter trigrams (e.g. aaa, aab etc.), case insensitive. Trigrams are taken only within words (do not cross adjacent words).&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.LetterNGramEventDriver&quot;&gt;
+        &lt;param name=&quot;N&quot; value=&quot;3&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;com.jgaap.canonicizers.UnifyCase&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+        &lt;culler class=&quot;edu.drexel.psal.jstylo.eventCullers.MostCommonEventsExtended&quot;&gt;
+            &lt;param name=&quot;N&quot; value=&quot;50&quot;/&gt;
+        &lt;/culler&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+</pre></div>
+
+
+<h2 id="word-lengths"><a name="user-content-word-lengths" href="#word-lengths" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="5"></a>Word Lengths</h2>
+<p>Features: Word Lengths</p>
+<p>Sample result values:</p>
+<div class="codehilite"><pre>&gt; Word-Lengths{8}                                      2.083494
+&gt; Word-Lengths{10}                                     1.991242
+&gt; Word-Lengths{12}                                     1.706604
+&gt; Word-Lengths{4}                                      1.551418
+&gt; Word-Lengths{13}                                     1.516167
+&gt; Word-Lengths{11}                                     1.073552
+&gt; Word-Lengths{2}                                      1.063432
+&gt; Word-Lengths{9}                                      0.999142
+&gt; Word-Lengths{6}                                      0.909484
+&gt; Word-Lengths{14}                                     0.840518
+</pre></div>
+
+
+<hr />
+<p>You seem to use words <code>N</code> character long frequently in your writing. Try finding words of this length in the document you want to anonymize and replacing them with longer or shorter symnonyms.</p>
+<p>You seem to use words <strong><code>N1</code></strong> characters long and <code>N2</code> characters long frequently in your writing, <code>N1</code> the most. Try finding words of these lengths in the document you want to anonymize and replacing them with longer or shorter synonyms.</p>
+<p>You seem to use words of the following lengths frequently in your writing, the topmost ones being the most revealing. Try finding words of these lengths in the document you want to anonymize and replacing them with longer or shorter synonyms.</p>
+<ol>
+<li>Words <code>N1</code> characters long</li>
+<li>Words <code>N2</code> characters long</li>
+<li>Words <code>N3</code> characters long</li>
+</ol>
+<hr />
+<div class="codehilite"><pre>&lt;feature name=&quot;Word Lengths&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequency of words of different lengths (excluding punctuation).&quot;/&gt;
+    &lt;event-driver class=&quot;com.jgaap.eventDrivers.WordLengthEventDriver&quot;&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;edu.drexel.psal.jstylo.canonicizers.StripEdgesPunctuation&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+</pre></div>
+
+
+<h2 id="misspelled-words"><a name="user-content-misspelled-words" href="#misspelled-words" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="6"></a>Misspelled Words</h2>
+<p>Features: Misspelled Words</p>
+<p>Sample result values:</p>
+<div class="codehilite"><pre>&gt; Misspelled-Words{it&#39;s}                               0.909484
+</pre></div>
+
+
+<hr />
+<p>You seem to misspell the follow words frequently in your writing, the topmost ones being the most revealing. Try finding these misspellings and fixing them in the document you want to anonymize.</p>
+<ol>
+<li>&ldquo;Word&rdquo;</li>
+</ol>
+<hr />
+<div class="codehilite"><pre>&lt;feature name=&quot;Misspelled Words&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Frequencies of misspelled words out of a list of 5,513 common misspellings.&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.ListEventDriver&quot;&gt;
+        &lt;param name=&quot;sort&quot; value=&quot;true&quot;/&gt;
+        &lt;param name=&quot;whiteList&quot; value=&quot;true&quot;/&gt;
+        &lt;param name=&quot;keepLexiconInMem&quot; value=&quot;true&quot;/&gt;
+        &lt;param name=&quot;underlyingEvents&quot; value=&quot;Words&quot;/&gt;
+        &lt;param name=&quot;filename&quot; value=&quot;edu/drexel/psal/resources/writeprints_misspellings.txt&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;com.jgaap.canonicizers.UnifyCase&quot;&gt;
+        &lt;/canonicizer&gt;
+        &lt;canonicizer class=&quot;edu.drexel.psal.jstylo.canonicizers.StripEdgesPunctuation&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+        &lt;culler class=&quot;edu.drexel.psal.jstylo.eventCullers.MostCommonEventsExtended&quot;&gt;
+            &lt;param name=&quot;N&quot; value=&quot;50&quot;/&gt;
+        &lt;/culler&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+</pre></div>
+
+
+<h2 id="function-words"><a name="user-content-function-words" href="#function-words" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="7"></a>Function Words</h2>
+<p>Features: Function Words</p>
+<p>Sample result values:</p>
+<div class="codehilite"><pre>&gt; Function-Words{this}                                 1.786993
+&gt; Function-Words{the}                                  1.701123
+&gt; Function-Words{he}                                   1.676441
+&gt; Function-Words{his}                                  1.560639
+&gt; Function-Words{was}                                  1.349051
+&gt; Function-Words{i}                                    1.176220
+&gt; Function-Words{that}                                 1.132181
+&gt; Function-Words{but}                                  0.925501
+&gt; Function-Words{also}                                 0.909484
+&gt; Function-Words{of}                                   0.888588
+&gt; Function-Words{on}                                   0.860398
+&gt; Function-Words{more}                                 0.840518
+&gt; Function-Words{not}                                  0.819622
+&gt; Function-Words{we}                                   0.793592
+&gt; Function-Words{to}                                   0.780786
+&gt; Function-Words{in}                                   0.755640
+</pre></div>
+
+
+<hr />
+<p>There are a finite set of common &ldquo;function&rdquo; words in the English language such as &ldquo;the&rdquo;, &ldquo;she&rdquo;, &ldquo;we&rdquo;, &ldquo;to&rdquo;, &ldquo;aso&rdquo;, etc. You seem to use the following common function words frequently in your writing, the topmost ones being the most revealing. Try finding these occurrances in your document to anonymize and replacing or removing them where possible.</p>
+<ol>
+<li>&ldquo;this&rdquo;</li>
+<li>&ldquo;the&rdquo;</li>
+<li>&ldquo;he&rdquo;</li>
+</ol>
+<hr />
+<div class="codehilite"><pre>&lt;feature name=&quot;Function Words&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;512 common function words, used by Koppel et al. in Koppel, 2005.&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.ListEventDriver&quot;&gt;
+        &lt;param name=&quot;sort&quot; value=&quot;false&quot;/&gt;
+        &lt;param name=&quot;whiteList&quot; value=&quot;true&quot;/&gt;
+        &lt;param name=&quot;keepLexiconInMem&quot; value=&quot;true&quot;/&gt;
+        &lt;param name=&quot;underlyingEvents&quot; value=&quot;Words&quot;/&gt;
+        &lt;param name=&quot;filename&quot; value=&quot;edu/drexel/psal/resources/koppel_function_words.txt&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+        &lt;canonicizer class=&quot;com.jgaap.canonicizers.UnifyCase&quot;&gt;
+        &lt;/canonicizer&gt;
+        &lt;canonicizer class=&quot;edu.drexel.psal.jstylo.canonicizers.StripEdgesPunctuation&quot;&gt;
+        &lt;/canonicizer&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+        &lt;culler class=&quot;edu.drexel.psal.jstylo.eventCullers.MostCommonEventsExtended&quot;&gt;
+            &lt;param name=&quot;N&quot; value=&quot;50&quot;/&gt;
+        &lt;/culler&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+</pre></div>
+
+
+<h2 id="punctuation"><a name="user-content-punctuation" href="#punctuation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="8"></a>Punctuation</h2>
+<p>Features: Punctuation</p>
+<p>Sample result values: None yet</p>
+<hr />
+<p>You use the following punctuation quite frequently in your writing, the topmost ones being the most revealing. Try replacing these punctuation makes with substitutions where applicable or removing where necessary in your document to anonymize.</p>
+<ol>
+<li>!</li>
+<li>,</li>
+<li>.</li>
+</ol>
+<hr />
+<div class="codehilite"><pre>&lt;feature name=&quot;Punctuation&quot; calc_hist=&quot;true&quot;&gt;
+    &lt;description value=&quot;Punctuation symbols like . , ! etc.&quot;/&gt;
+    &lt;event-driver class=&quot;edu.drexel.psal.jstylo.eventDrivers.ListEventDriver&quot;&gt;
+        &lt;param name=&quot;sort&quot; value=&quot;false&quot;/&gt;
+        &lt;param name=&quot;whiteList&quot; value=&quot;true&quot;/&gt;
+        &lt;param name=&quot;keepLexiconInMem&quot; value=&quot;false&quot;/&gt;
+        &lt;param name=&quot;underlyingEvents&quot; value=&quot;Characters&quot;/&gt;
+        &lt;param name=&quot;filename&quot; value=&quot;edu/drexel/psal/resources/writeprints_punctuation.txt&quot;/&gt;
+    &lt;/event-driver&gt;
+    &lt;canonicizers&gt;
+    &lt;/canonicizers&gt;
+    &lt;cullers&gt;
+    &lt;/cullers&gt;
+    &lt;norm value=&quot;NONE&quot;/&gt;
+    &lt;factor value=&quot;1.0&quot;/&gt;
+&lt;/feature&gt;
+</pre></div>
+
+
+<h2 id="part-of-speech-combinations"><a name="user-content-part-of-speech-combinations" href="#part-of-speech-combinations" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a><a id="9"></a>Part-Of-Speech Combinations</h2>
+<p>[TODO]</p>
+</html>
