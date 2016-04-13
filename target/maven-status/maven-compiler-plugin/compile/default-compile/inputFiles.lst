@@ -1,8 +1,8 @@
-/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 3/CI 493 - Senior Design III/wordenseniordesign/src/main/java/com/websystique/springmvc/controller/IndexController.java
-/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 3/CI 493 - Senior Design III/wordenseniordesign/src/main/java/com/websystique/springmvc/service/UserService.java
-/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 3/CI 493 - Senior Design III/wordenseniordesign/src/main/java/com/websystique/springmvc/configuration/HelloWorldInitializer.java
-/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 3/CI 493 - Senior Design III/wordenseniordesign/src/main/java/com/websystique/springmvc/configuration/HelloWorldConfiguration.java
-/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 3/CI 493 - Senior Design III/wordenseniordesign/src/main/java/com/websystique/springmvc/controller/HelloWorldRestController.java
-/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 3/CI 493 - Senior Design III/wordenseniordesign/src/main/java/com/websystique/springmvc/service/UserServiceImpl.java
-/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 3/CI 493 - Senior Design III/wordenseniordesign/src/main/java/com/websystique/springmvc/model/User.java
-/Users/Barrowclift/Documents/School/Drexel/Year 5/Quarter 3/CI 493 - Senior Design III/wordenseniordesign/src/main/java/com/websystique/springmvc/configuration/CORSFilter.java
+/Users/Eric/Documents/EclipseWorkSpace/wordenseniordesign/src/main/java/com/websystique/springmvc/service/UserServiceImpl.java
+/Users/Eric/Documents/EclipseWorkSpace/wordenseniordesign/src/main/java/com/websystique/springmvc/model/User.java
+/Users/Eric/Documents/EclipseWorkSpace/wordenseniordesign/src/main/java/com/websystique/springmvc/service/UserService.java
+/Users/Eric/Documents/EclipseWorkSpace/wordenseniordesign/src/main/java/com/websystique/springmvc/controller/HelloWorldRestController.java
+/Users/Eric/Documents/EclipseWorkSpace/wordenseniordesign/src/main/java/com/websystique/springmvc/configuration/HelloWorldInitializer.java
+/Users/Eric/Documents/EclipseWorkSpace/wordenseniordesign/src/main/java/com/websystique/springmvc/controller/IndexController.java
+/Users/Eric/Documents/EclipseWorkSpace/wordenseniordesign/src/main/java/com/websystique/springmvc/configuration/HelloWorldConfiguration.java
+/Users/Eric/Documents/EclipseWorkSpace/wordenseniordesign/src/main/java/com/websystique/springmvc/configuration/CORSFilter.java

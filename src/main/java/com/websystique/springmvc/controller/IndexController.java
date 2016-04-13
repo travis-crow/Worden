@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.google.gson.JsonObject;
 import com.jgaap.generics.Document;
 
 import edu.drexel.psal.jstylo.generics.FullAPI;
@@ -51,8 +53,8 @@ public class IndexController {
                 Iterator<String> itr = request.getFileNames();
                 
                 //TODO need to make these paths relative / internal
-                String testDir = "/Users/tdutko001c/git/wordenseniordesign/References/test/";///request.getServletContext().getRealPath("/TestDocument/");
-                String refDir = "/Users/tdutko001c/git/wordenseniordesign/References/train/";//request.getServletContext().getRealPath("/References/");
+                String testDir = "/Users/Eric/Documents/TestDocument/";///request.getServletContext().getRealPath("/TestDocument/");
+                String refDir = "/Users/Eric/Documents/References/";//request.getServletContext().getRealPath("/References/");
                 String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
                 System.out.println("Temporary File Directory: "+refDir);
                 
@@ -71,7 +73,34 @@ public class IndexController {
                     }
                 }	
                 
+                
                 //TODO load in the sample files
+                                //sample files are currently located in References/samples
+                if(type != null)
+                {
+	                String samplePath;
+	                if(type == "2"){
+	                	samplePath = request.getServletContext().getRealPath("/References/samples/emails");
+	                }
+	                else if(type == "3"){
+	                	samplePath = request.getServletContext().getRealPath("/References/samples/twitter");
+	                }
+	                else {
+	                	samplePath = request.getServletContext().getRealPath("/References/samples/essays");
+	                }
+	              
+	                           FileUtils file = new FileUtils();
+	                           Iterator<File> files = file.iterateFiles(new File(samplePath),null, true);
+	                           
+	                          while(files.hasNext()){
+	                        	  File currentFile = files.next();
+	                        	  String currentAuthor = currentFile.getParentFile().getName();
+	                        	  System.out.println("Adding train document: "+currentFile.getName());
+	                        	  ps.addTrainDoc(currentAuthor, makeDoc(currentFile,currentAuthor));
+	                          }
+                }          
+                            
+                                
                 //switch on essay/email/tweet dbs
                 
                 System.out.println("Problem Set XML\n"+ps.toXMLString());
@@ -87,9 +116,10 @@ public class IndexController {
                 fullApi.calcInfoGain();
                 fullApi.run();
                 
-                String string = fullApi.getStatString() +"[-----------------]\n"+fullApi.getReadableInfoGain(false); 
-                System.out.println(string);
-                return string;
+                
+                JsonObject json = fullApi.getResults().toJson();
+                json.addProperty("InfoGain",fullApi.getReadableInfoGain(false));
+                return json.toString();
 		    }
 
     private Document makeDoc(File file, String author) {

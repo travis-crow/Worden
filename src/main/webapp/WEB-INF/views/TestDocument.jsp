@@ -7,11 +7,15 @@
 	<title>Worden - Test Your Own Document</title>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link href="<c:url value='/static/css/materialize.css' />" rel="stylesheet"" rel="stylesheet" />
+	<script src="https://code.jquery.com/jquery-git.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 	<script src="<c:url value='/static/js/ng-file-upload.js' />" ></script>
 	<script src="<c:url value='/static/js/fileUploadController.js' />" ></script>
 	<link href="<c:url value='/static/css/style.css' />" rel="stylesheet" rel="stylesheet" />
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/font/material-design-icons/Material-Design-Icons.woff">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/font/roboto/Roboto-Bold.eot">
 </head>
 
 <body ng-app="fileUpload" ng-controller="fileUploadController">
@@ -28,6 +32,14 @@
 	</header>
 	
 	<main>
+	
+	<div ng-show="loading">
+	<h3 class="header center"><i style="color:#9B4DCA;" class=" fa fa-circle-o-notch fa-spin fa-3x"></i></h3>
+				<h3 style="color:#9B4DCA;" class="header center">This might take some time..... </i></h3>
+				
+	</div>
+	
+	<div ng-hide="results || loading">
 		<div class="section" id="index-banner">
 			<h3 class="header center">Test Your Own Document</h3>
 		</div>
@@ -67,7 +79,13 @@
 					</div>
 					<br>
 				</form>
-
+				<div>
+				<p>Select whether or not you have some similar documents from at least two other people which your documents would most likely be compared against when someone would try identifying the author:</p>
+				<button ng-hide="uploadGenericSet" ng-click="selectUploadGenericSet()" id="text-your-own-document-next-page" class="btn waves-effect waves-light purple">Select Generic Set</button>
+				<button ng-hide="uploadAuthors" ng-click="selectUploadAuthors()" id="text-your-own-document-next-page" class="btn waves-effect waves-light purple">Upload Known Authors</button>
+				</div>
+				
+			<div id="genericDocumentSet" ng-show="uploadGenericSet">
 			<h3 class="header center">Selecting Generic Document Set</h3>
 			<div class="row">
 				<p>While providing Worden with documents from other similar authors your document to anonymize would be compared against delivers the best results, Worden provides some generic writing sets for common writing types for you to choose from for you to test with. It is recommended you supply an appropriate writing set for legitimate attempts to anonymize your documents.</p>
@@ -84,6 +102,47 @@
 					
 				</div>
 			</div>
+			</div>
+			
+			<div id="uploadAuthors" ng-show="uploadAuthors">
+			<h3 class="header center">Adding Other Authors' Documents</h3>
+			<div class="row">
+				<p>Add documents from at least three authors your documents will be compared against.</p>
+				<div class="col  s12">
+					<div class="col s12" style="    padding: 0; background-color:white;border: solid 1px #D1D1D1;border-radius:2px;">
+						<div class = "col s4" style="background-color:#F4F5F6;border-right: 1px solid #D1D1D1;border-bottom-left-radius:2px;border-top-left-radius:2px;">
+							<div class="row">
+								<div class="col s12" style="padding-top:6px;">
+									<a href="" ng-click="addAuthor()" id="create-author" class="btn-flat center purple-text" style="display: block; width: 100%;">Create Author</a>
+									<input id="add-documents" class="btn-flat center purple-text" type="button" value="Add Documents" style="=display: block; width: 100%;">
+									<a href="" id="rename-author" class="btn-flat center purple-text" style="display: block; width: 100%;">Rename Author</a>
+									<a href="" id="remove" class="btn-flat center purple-text" style="display: block; width: 100%;">Remove</a>
+									<a href="" id="remove-all" class="btn-flat center purple-text" style="display: block; width: 100%;">Remove All</a>
+									<input name="add-documents" id="add-documents-input" type="file" multiple="" style="visibility:hidden">
+								</div>
+							</div>
+						</div>
+						<div class="col s4">
+						<div ng-show="addNewAuthor">
+							<input type = "text"  ng-model="addNewAuthorName" placeholder="Name"><button ng-click="submitNewAuthor()" class="btn waves-effect waves-light purple">Add</button>
+						</div>
+						<div ng-repeat="author in authors">
+						<div ng-class="" ng-click="selectAuthor($index)" style="padding:0" class="btn-flat "><i style="margin-right:5px;" class="fa fa-user"></i>{{author.Name}}</div>
+						</div>
+						</div>
+						<div ng-show="currentAuthor" class="col s4">
+						<div style="cursor:pointer;font-size:15px" type="file" ng-change="setFile()" ngf-select ng-model="currentAuthor.UploadFile" class="center purple-text">Add To {{currentAuthor.Name}}'s Documents</div>
+							<div ng-repeat="file in currentAuthor.Files">
+								{{file.name}}
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			</div>
+			
 			<br>
 			<div class="row">
 				<div class="col s12">
@@ -94,6 +153,45 @@
 			</div>
 			<br>
 			
+		</div>
+		<div ng-show="results" ng-hide="results === false">
+		<div class="section" id="index-banner">
+			<h3 class="header center">Results</h3>
+		</div>
+		<div class="row">
+			<div class="container">
+			<h4 style="color:#9B4DCA" class="header center">Document: {{results.experimentContents[0].title}}</h4>
+				<p>Worden believes <strong id="suspectedAuthor">{{suspected}}</strong> the true author of <strong class="documentName">{{results.experimentContents[0].title}}</strong> among the <strong id="numberOfAuthors"></strong> other authors. </p>
+				<br>
+			</div>
+			<div class="row" id="suggestions">
+			</div>
+		</div>
+
+		<!-- Modal Structure -->
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<div class="container" style="overflow-y: scroll;overflow-x: hidden;max-height:350px;">
+					<div class="row">
+						<div class="col s12 l10 offset-l1">
+							<table class="centered highlight bordered">
+								<thead>
+									<tr>
+										<th data-field="id">Author</th>
+										<th data-field="name">Wrote <span class="documentName"></span></th>
+									</tr>
+								</thead>
+								<tbody id="certaintyTable">
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-action modal-close waves-effect waves-light purple btn" style="margin-right:5px;">Close</a>
+			</div>
+		</div>
 		</div>
 	</main>
 
@@ -108,8 +206,6 @@
 	</footer>
 	
 	<!-- Scripts -->
-	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="../js/materialize.js"></script>
 	<script>
 		$(document).ready(function() {
 			$('input:radio').change(function() {
@@ -126,6 +222,11 @@
 	</script>
 </body>
 <style>
+.selectedAuthor
+{
+	background-color: #9B4DCA !important;
+    color: #FFF;
+}
 .divTextInput{
     background-color: transparent;
     border: none;
