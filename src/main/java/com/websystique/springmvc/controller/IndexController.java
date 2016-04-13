@@ -2,9 +2,7 @@ package com.websystique.springmvc.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,6 +20,7 @@ import edu.drexel.psal.jstylo.generics.FullAPI;
 import edu.drexel.psal.jstylo.generics.FullAPI.Builder;
 import edu.drexel.psal.jstylo.generics.FullAPI.analysisType;
 import edu.drexel.psal.jstylo.generics.ProblemSet;
+import edu.drexel.psal.jstylo.machineLearning.weka.WekaAnalyzer;
 
 @Controller
 @RequestMapping("/")
@@ -79,14 +78,13 @@ public class IndexController {
                 FullAPI fullApi = new Builder()
                 .cfdPath(xml)
                 .ps(ps)
-                .classifierPath("weka.classifiers.functions.SMO")
+                .setAnalyzer(new WekaAnalyzer())
                 .numThreads(1)
                 .analysisType(analysisType.TRAIN_TEST_KNOWN)
                 .build();
                 
                 fullApi.prepareInstances();
                 fullApi.calcInfoGain();
-                fullApi.prepareAnalyzer();
                 fullApi.run();
                 
                 String string = fullApi.getStatString() +"[-----------------]\n"+fullApi.getReadableInfoGain(false); 
