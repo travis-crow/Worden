@@ -88,6 +88,7 @@ public class IndexController {
                 fullApi.run();
                 
                 String string = fullApi.getStatString() +"[-----------------]\n"+fullApi.getReadableInfoGain(false); 
+                System.out.println(string);
                 return string;
 		    }
 
