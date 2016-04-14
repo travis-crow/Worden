@@ -32,7 +32,7 @@ public class IndexController {
     
 		@RequestMapping("/")
 	    public String getIndexPage() {
-	        return "UserManagement";
+	        return "Welcome";
 	    }
 		@RequestMapping("/Welcome")
 	    public String getWelcomePage() {
@@ -51,10 +51,21 @@ public class IndexController {
 				ProblemSet ps = new ProblemSet();
 				ps.setTrainCorpusName("Worden Experiment");
                 Iterator<String> itr = request.getFileNames();
+                String testDir = request.getServletContext().getRealPath("/TestDocument/");
+                String refDir = request.getServletContext().getRealPath("/TrainDocuments/");
                 
+                File testFile = new File(testDir);
+                if(!testFile.exists()){
+                	testFile.mkdir();
+                }
+                
+                File refFile = new File(refDir);
+                if(!refFile.exists()){
+                	refFile.mkdir();
+                }
                 //TODO need to make these paths relative / internal
-                String testDir = "/Users/Eric/Documents/TestDocument/";///request.getServletContext().getRealPath("/TestDocument/");
-                String refDir = "/Users/Eric/Documents/References/";//request.getServletContext().getRealPath("/References/");
+               /* String testDir = "/Users/Eric/Documents/TestDocument/";///request.getServletContext().getRealPath("/TestDocument/");
+                String refDir = "/Users/Eric/Documents/References/";//request.getServletContext().getRealPath("/References/");*/
                 String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
                 System.out.println("Temporary File Directory: "+refDir);
                 

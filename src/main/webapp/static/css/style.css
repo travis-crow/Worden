@@ -90,6 +90,16 @@ html {
 }
 
 
+.card-content ul li {
+	list-style-type: circle;
+	margin-left: 2em;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+
 /* ---------- COLOR THEME ---------- */
 
 
@@ -182,8 +192,8 @@ input[type=search].valid,
 input[type=search]:focus.valid,
 textarea.materialize-textarea.valid,
 textarea.materialize-textarea:focus.valid {
-	border-bottom: 1px solid #A0EA03;
-	box-shadow: 0 1px 0 0 #A0EA03;
+	border-bottom: 1px solid #7DB801;
+	box-shadow: 0 1px 0 0 #7DB801;
 }
 /* Line color invalid */
 input:not([type]).invalid, input:not([type]):focus.invalid,
@@ -289,5 +299,42 @@ html, label {
 	background-color: #c79ce1;
 }
 .modal, .modal .modal-footer {
-	background-color: #Ffffff;
+	background-color: #ffffff;
+}
+
+
+/* Tabs colors */
+.tabs .tab a {
+	color: #9B4DCA;
+}
+.tabs .tab a:hover {
+	color: #c79ce1;
+}
+.tabs .indicator {
+	background-color: #9B4DCA;
+}
+.tabs .tab a.success {
+	color: #7DB801;
+}
+.tabs .tab a.success:hover {
+	color: #A0EA03;
+}
+.tabs .tab a.failure {
+	color: #C70876;
+}
+.tabs .tab a.failure:hover {
+	color: #FF0996;
+}
+
+.noun {
+	color: #6D0CA7;
+	font-weight:500;
+}
+.verb {
+	color: #C70476;
+	font-weight:500;
+}
+.adjective {
+	color: #7DB801;
+	font-weight:500;
 }

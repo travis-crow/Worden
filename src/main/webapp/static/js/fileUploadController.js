@@ -97,7 +97,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 					if (numbersCount > 10) {
 						return;
 					}
-					createCard(featureStyles, 'number', 'Numbers', numbersFontWeight);
+					createCard(featureStyles, 'number', 'Numbers', numbersFontWeight, 'You seem to use the following numbers a lot in your writing, the topmost ones being the most revealing. Try removing as many of them as you can by generalizing them away, referring to them by pronouns, or converting them to their written form where possible in the document you want to anonymize:');
 					if (numbersFontWeight > 300) {
 						numbersFontWeight-=100;
 					}
@@ -106,7 +106,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 					if (uniqueCharactersCount > 10) {
 						return;
 					}
-					createCard(featureStyles, 'unique-character', 'Unique Characters', uniqueCharactersFontWeight);
+					createCard(featureStyles, 'unique-character', 'Unique Characters', uniqueCharactersFontWeight, 'You seem to use the following special characters a lot in your writing, the topmost ones being the most revealing. Try avoiding them or removing extraneous uses where possible in the document you want to anonymize:');
 					if (uniqueCharactersFontWeight > 300) {
 						uniqueCharactersFontWeight-=100;
 					}
@@ -115,7 +115,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 					if (misspelledWordsCount > 10) {
 						continue;
 					}
-					createCard(featureStyles, 'misspelled-words', 'Misspelled Words', misspelledWordsFontWeight);
+					createCard(featureStyles, 'misspelled-words', 'Misspelled Words', misspelledWordsFontWeight, 'You seem to misspell the follow words frequently in your writing, the topmost ones being the most revealing. Try finding these misspellings and fixing them in the document you want to anonymize:');
 					if (misspelledWordsFontWeight > 300) {
 						misspelledWordsFontWeight-=100;
 					}
@@ -124,7 +124,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 					if (punctuationCount > 10) {
 						continue;
 					}
-					createCard(featureStyles, 'punctuation', "Punctuation", punctuationFontWeight);
+					createCard(featureStyles, 'punctuation', "Punctuation", punctuationFontWeight, 'You use the following punctuation frequently in your writing, the topmost ones being the most revealing. Try substituting these punctuation marks with others where applicable or removing where necessary in your document to anonymize:');
 					if (punctuationFontWeight > 300) {
 						punctuationFontWeight-=100;
 					}
@@ -133,7 +133,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 					if (wordLengthsCount > 10) {
 						continue;
 					}
-					createCard(featureStyles, 'word-lengths', "Word Lengths", wordLengthsFontWeight);
+					createCard(featureStyles, 'word-lengths', "Word Lengths", wordLengthsFontWeight, 'You seem to use words of the following lengths frequently in your writing, the topmost ones being the most revealing. Try finding words of these lengths in the document you want to anonymize and replacing them with longer or shorter synonyms:');
 					if (wordLengthsFontWeight > 300) {
 						wordLengthsFontWeight-=100;
 					}
@@ -142,7 +142,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 					if (lettersAndLetterCombinationsCount > 10) {
 						continue;
 					}
-					createCard(featureStyles, 'letters-and-letter-combinations', "Letters and Letter Combinations", lettersAndLetterCombinations);
+					createCard(featureStyles, 'letters-and-letter-combinations', "Letters and Letter Combinations", lettersAndLetterCombinations, '');
 					if (lettersAndLetterCombinations > 300) {
 						lettersAndLetterCombinations-=100;
 					}
@@ -151,7 +151,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 					if (functionWordsCount > 10) {
 						continue;
 					}
-					createCard(featureStyles, 'function-words', "Function Words", functionWordsFontWeight);
+					createCard(featureStyles, 'function-words', "Function Words", functionWordsFontWeight, 'You seem to use the following word combinations frequently in your writing, the topmost ones being the most revealing. Try rewording these phrases or avoiding them entirely in the document you want to anonymize:');
 					if (functionWordsFontWeight > 300) {
 						functionWordsFontWeight-=100;
 					}
