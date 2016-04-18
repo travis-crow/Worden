@@ -7,52 +7,52 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 	$scope.results = false;
 	$scope.loading = false;
 	$scope.currentAuthorIndex;
-    $scope.uploadFiles = function (files) {
-        $scope.files = files;
-    };
-    
-    $scope.uploadAuthors = false;
-    $scope.uploadGenericSet = false;
+	$scope.uploadFiles = function (files) {
+		$scope.files = files;
+	};
+	
+	$scope.uploadAuthors = false;
+	$scope.uploadGenericSet = false;
 
-    $scope.selectUploadAuthors = function (){
-    	$scope.uploadGenericSet = false;
-    	$scope.uploadAuthors = true;
-    }
-    $scope.addAuthor = function (){
-    	$scope.addNewAuthor = true;
-    }
-    
-    $scope.submitNewAuthor = function(){
-    	var author = {};
-    	author.Name = $scope.addNewAuthorName;
-    	$scope.authors.push(author);
-    	$scope.addNewAuthor = false;
-    	$scope.addNewAuthorName = "";
-    	
-    }
-    $scope.selectAuthor = function(index){
-    	if(angular.isDefined($scope.currentAuthorIndex)){
-    		$scope.authors[index].Class = "Inactive";
-    	}
-    	$scope.authors[index].Class = "selectedAuthor";
-    	$scope.currentAuthor = $scope.authors[index];
-    }
-    
-    $scope.setFile = function(){
-    	if(angular.isUndefined($scope.currentAuthor.Files)){
-    		$scope.currentAuthor.Files = [];
-    	}
-    	$scope.currentAuthor.Files.push($scope.currentAuthor.UploadFile);
-    	$scope.currentAuthor.UploadFile = {};
-    }
-    $scope.selectUploadGenericSet = function (){
-    	$scope.uploadAuthors = false;
-    	$scope.uploadGenericSet = true;
-    }
-    
-    
-    $scope.processResults = function (data){
-    	
+	$scope.selectUploadAuthors = function (){
+		$scope.uploadGenericSet = false;
+		$scope.uploadAuthors = true;
+	}
+	$scope.addAuthor = function (){
+		$scope.addNewAuthor = true;
+	}
+	
+	$scope.submitNewAuthor = function(){
+		var author = {};
+		author.Name = $scope.addNewAuthorName;
+		$scope.authors.push(author);
+		$scope.addNewAuthor = false;
+		$scope.addNewAuthorName = "";
+		
+	}
+	$scope.selectAuthor = function(index){
+		if(angular.isDefined($scope.currentAuthorIndex)){
+			$scope.authors[index].Class = "Inactive";
+		}
+		$scope.authors[index].Class = "selectedAuthor";
+		$scope.currentAuthor = $scope.authors[index];
+	}
+	
+	$scope.setFile = function(){
+		if(angular.isUndefined($scope.currentAuthor.Files)){
+			$scope.currentAuthor.Files = [];
+		}
+		$scope.currentAuthor.Files.push($scope.currentAuthor.UploadFile);
+		$scope.currentAuthor.UploadFile = {};
+	}
+	$scope.selectUploadGenericSet = function (){
+		$scope.uploadAuthors = false;
+		$scope.uploadGenericSet = true;
+	}
+	
+	
+	$scope.processResults = function (data){
+		
 			var infoGainFeatures = $scope.results.InfoGain;
 			var featureLine = infoGainFeatures.split('\n');
 
@@ -142,7 +142,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 					if (lettersAndLetterCombinationsCount > 10) {
 						continue;
 					}
-					createCard(featureStyles, 'letters-and-letter-combinations', "Letters and Letter Combinations", lettersAndLetterCombinations, '');
+					createCard(featureStyles, 'letters-and-letter-combinations', "Letters and Letter Combinations", lettersAndLetterCombinations, 'You seem to use the following letters and letter combinations frequently in your writing, the topmost ones being the most revealing. Try searching your document to anonymize for occurrences and removing them where possible:');
 					if (lettersAndLetterCombinations > 300) {
 						lettersAndLetterCombinations-=100;
 					}
@@ -176,15 +176,15 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 
 					if (document.getElementById("words-and-word-combinations-card") == null) {
 						$("#suggestions").append('<div class="col s12 m6 l4" id="words-and-word-combinations-card">'
-							                     + '<div class="card">'
-							                      + '<div class="card-content">'
-							                       + '<span class="card-title purple-text">Words and Word Combinations</span>'
-							                       + '<p>You seem to use the following word combinations frequently in your writing, the topmost ones being the most revealing. Try rewording these phrases or avoiding them entirely in the document you want to anonymize:</p>'
-							                       + '<ul id="words-and-word-combinations-list">'
-							                        + '<li style="font-weight:'+wordsAndWordCombinationsFontWeight+';">' + processedWords + '</li>'
-							                       + '</ul>'
-							                      + '</div>'
-							                     + '</div>');
+												 + '<div class="card">'
+												  + '<div class="card-content">'
+												   + '<span class="card-title purple-text">Words and Word Combinations</span>'
+												   + '<p>You seem to use the following word combinations frequently in your writing, the topmost ones being the most revealing. Try rewording these phrases or avoiding them entirely in the document you want to anonymize:</p>'
+												   + '<ul id="words-and-word-combinations-list">'
+													+ '<li style="font-weight:'+wordsAndWordCombinationsFontWeight+';">' + processedWords + '</li>'
+												   + '</ul>'
+												  + '</div>'
+												 + '</div>');
 					} else {
 						$("#words-and-word-combinations-list").append('<li style="font-weight:'+wordsAndWordCombinationsFontWeight+';">' + processedWords + '</li>');
 					}
@@ -208,81 +208,75 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 		
 
 		$('.distribution-trigger').leanModal();
-    };
-    
-    
-    function sortAuthorPercentages(percentageAuthor1, percentageAuthor2) {
+	};
+	
+	
+	function sortAuthorPercentages(percentageAuthor1, percentageAuthor2) {
 		return (percentageAuthor2[0] - percentageAuthor1[0]);
 	}
 
-	function createCard(featureStyles, id, title, fontWeight) {
+	function createCard(featureStyles, id, title, fontWeight, description) {
 		var feature = featureStyles.substring(0, featureStyles.length - 1);
 		if (document.getElementById(id+"-card") == null) {
 			$("#suggestions").append('<div class="col s12 m6 l4" id="'+id+'-card">'
-				                     + '<div class="card">'
-				                      + '<div class="card-content">'
-				                       + '<span class="card-title purple-text">'+title+'</span>'
-				                       + '<p>You seem to misspell the follow words frequently in your writing, the topmost ones being the most revealing. Try finding these misspellings and fixing them in the document you want to anonymize:</p>'
-				                       + '<ul id="'+id+'-list">'
-				                        + '<li style="font-weight:'+fontWeight+';">' + feature + '</li>'
-				                       + '</ul>'
-				                      + '</div>'
-				                     + '</div>');
+									 + '<div class="card">'
+									  + '<div class="card-content">'
+									   + '<span class="card-title purple-text">'+title+'</span>'
+									   + '<p>'+description+'</p>'
+									   + '<ul id="'+id+'-list">'
+										+ '<li style="font-weight:'+fontWeight+';">' + feature + '</li>'
+									   + '</ul>'
+									  + '</div>'
+									 + '</div>');
 		} else {
 			$("#"+id+"-list").append('<li style="font-weight:'+fontWeight+';">' + feature + '</li>');
 		}
 	}
-    
-    $scope.setSuspectedAuthor = function(){
-		var currentHighest = 0.00;
-		var currentIndex = 0;
-    	angular.forEach($scope.results.experimentContents[0].probabilityMap, function(value, key) {
-    		if(parseFloat(value[Object.keys(value)[0]]) > currentHighest){
-    			currentIndex = key;
-    		}
-    		
-    		});
-    	
-    	var element = $scope.results.experimentContents[0].probabilityMap[currentIndex];
-    	for(var key in element){
-    		if( element[key] !== "userAuthor"){
-        		$scope.suspected = "you are not";
-        	}
-        	else{
-        		$scope.suspected = "you are";
-        	}
-    	}
-    	
-    };
 	
-    $scope.startUpload = function(){
-    	$scope.loading = true;
-    	 if ($scope.files && $scope.files.length) {
-             Upload.upload({
-                 url: '/Spring4MVCAngularJSExample/StartProcess',
-                 data: {
-                     files: $scope.files,
-                     test: $scope.testFile,
-                     type: $scope.type
-                 }
-             }).then(function (response) {
-                 $timeout(function () {
-                $scope.results	= angular.copy(response.data);
-                	 $scope.processResults();
-                	 $scope.setSuspectedAuthor();
-                	 $scope.loading = false;
-                     
-                 });
-             }, function (response) {
-                 if (response.status > 0) {
-                     $scope.errorMsg = response.status + ': ' + response.data;
-                 }
-             }, function (evt) {
-               
-             });
-         }
-    };
-    
-    
-    
+	$scope.setSuspectedAuthor = function(){
+		var currentHighest = 0.00;
+		var currentSuspect = "";
+		angular.forEach($scope.results.experimentContents[0].probabilityMap, function(value, key) {
+			var tmpValue = parseFloat(value[Object.keys(value)[0]]);
+			if (tmpValue > currentHighest){
+				console.log(Object.keys(value)[0]);
+				currentSuspect = Object.keys(value)[0];
+				currentHighest = tmpValue;
+			}
+		});
+		
+		if (currentSuspect !== "userAuthor" && currentSuspect !== "testAuthor") {
+			$scope.suspected = "you are not";
+		} else {
+			$scope.suspected = "you are";
+		}
+	};
+	
+	$scope.startUpload = function(){
+		$scope.loading = true;
+		 if ($scope.files && $scope.files.length) {
+			 Upload.upload({
+				 url: '/Worden/StartProcess',
+				 data: {
+					 files: $scope.files,
+					 test: $scope.testFile,
+					 type: $scope.type
+				 }
+			 }).then(function (response) {
+				 $timeout(function () {
+				$scope.results	= angular.copy(response.data);
+					 $scope.processResults();
+					 $scope.setSuspectedAuthor();
+					 $scope.loading = false;
+					 
+				 });
+			 }, function (response) {
+				 if (response.status > 0) {
+					 $scope.errorMsg = response.status + ': ' + response.data;
+				 }
+			 }, function (evt) {
+			   
+			 });
+		 }
+	};
 }]);
