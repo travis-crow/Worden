@@ -22,7 +22,7 @@ import com.jgaap.generics.Document;
 import edu.drexel.psal.jstylo.generics.FullAPI;
 import edu.drexel.psal.jstylo.generics.FullAPI.Builder;
 import edu.drexel.psal.jstylo.generics.FullAPI.analysisType;
-import edu.drexel.psal.jstylo.generics.ProblemSet;
+import edu.drexel.psal.jstylo.featureProcessing.ProblemSet;
 import edu.drexel.psal.jstylo.machineLearning.weka.WekaAnalyzer;
 
 @Controller
