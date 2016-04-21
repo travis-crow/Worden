@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-		<title>Worden - Test Your Own Document</title>
+		<title>Worden - Identify Anonymous Document</title>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link href="<c:url value='/static/css/materialize.css' />" rel="stylesheet" " rel="stylesheet " />
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js "></script>
@@ -22,7 +22,7 @@
 					<a href="../Worden/Welcome" class="brand-logo right"><img id="worden-logo" src="<c:url value='/static/images/worden-banner-logo.png' />"></a>
 					<div class="col s12 hide-on-med-and-down">
 						<a href="../Worden/Welcome" class="breadcrumb">Home</a>
-						<a href="../Worden/TestDocument" class="breadcrumb">Test Your Own Document</a>
+						<a href="../Worden/IdentifyDocument" class="breadcrumb">Identify Anonymous Document</a>
 						<span ng-show="results" ng-hide="results === false" class="breadcrumb">Results</span>
 					</div>
 				</div>
@@ -43,7 +43,7 @@
 				<div class="container">
 					<div class="row">
 						<form action="#">
-							<p>Select your document you want Worden to attempt identifying:</p>
+							<p>Select the anonymous document to identify:</p>
 							<div class="file-field input-field">
 								<div id="add-test-document" class="btn-large waves-effect waves-light purple col l4 s12" type="file" name="file" required ng-model="testFile" ngf-max-size="10MB" ngf-select ngf-model-invalid="errorFile">
 									<span>Add Document</span>
@@ -58,85 +58,13 @@
 									</div>
 								</div>
 							</div>
-							<br>
-							<br>
-							<br>
-							<br>
-							<div class="file-field input-field" ng-show="testFile">
-								<p>Select at least two other similar documents you've written for Worden to learn how you usually write.</p>
-								<ul style="color:#606C76;margin-left:1.2em;">
-									<li style="list-style-type: circle;">More documents yields more accurate results, ideally select around 10</li>
-									<li style="list-style-type: circle;">Keep the document types similar. For example, if above you select a work email you wrote, add only other work emails</li>
-								</ul>
-								<div class="file-field input-field">
-									<!-- <button class="btn-large waves-effect waves-light purple col l4 s12" 
-												ngf-select="uploadFiles($files, $invalidFiles)"
-												multiple
-												ngf-max-height="1000"
-												ngf-max-size="10MB"
-												required
-												ng-model="otherFiles">
-											Add Other Documents
-										</button> -->
-									<div class="btn-large waves-effect waves-light purple col l4 s12" ngf-select="uploadFiles($files, $invalidFiles)" multiple ngf-max-height="1000" ngf-max-size="10MB" required ng-model="otherFiles">
-										<span>Add Other Documents</span>
-										<input type="file" multiple>
-									</div>
-									<div class="col s12 chip-box inactive-box" id="other-documents-box" style="margin-bottom:2em;height:150px;">
-										<div class="custom-chip" ng-show="file" ng-repeat="file in files" style="display:inline-block;">
-											<button class="custom-chip-delete-button" ng-click="file = null">
-												<i class="tiny material-icons">close</i>
-											</button>
-											{{file.name}}
-										</div>
-										<div style="min-height:0.8em;"></div>
-									</div>
-								</div>
-							</div>
-							<br>
 						</form>
-						<div ng-show="files" style="padding-top:10em;">
-							<p>Do you have similar documents written by at least three other people you can provide?</p>
-							<div>
-								<p>
-									<input ng-click="selectUploadAuthors()" name="radio-button-group" type="radio" id="has-author-documents" name="hasOtherDocuments" />
-									<label for="has-author-documents">Yes, I can supply some documents from at least three other people</label>
-								</p>
-								<p>
-									<input ng-click="selectUploadGenericSet()" name="radio-button-group" type="radio" id="does-not-have-author-documents" name="hasOtherDocuments" />
-									<label for="does-not-have-author-documents">No, I do not have other people's documents. (<span style="color:#C70631;">Results will not be accurate.</span> <span style="color:#606C76;"> In order to protect your identity Worden needs other potential suspects from your situation.</span>)</label>
-								</p>
-							</div>
-						</div>
 						<br>
-						<div id="genericDocumentSet" ng-show="uploadGenericSet">
-							<br>
-							<br>
-							<div class="row">
-								<div class="col s6">
-									<label>Select writing type</label>
-									<div class="input-field">
-										<select ng-model="type" class="browser-default" style="display:block;">
-											<option value="" disabled>Choose writing type</option>
-											<option value="1" selected>Email</option>
-											<option value="2">Paper</option>
-											<!-- <option value="3">Tweet</option> -->
-										</select>
-									</div>
-								</div>
-							</div>
-							<br>
-							<div class="row" ng-show="type">
-								<div class="col s12">
-									<button ng-click="startUpload()" id="text-your-own-document-next-page" class="btn waves-effect waves-light purple">Start</button>
-								</div>
-							</div>
-						</div>
 					</div>
-					<div id="uploadAuthors" ng-show="uploadAuthors">
+					<div id="uploadAuthors" ng-show="testFile">
 						<br>
 						<div class="row">
-							<p>Add documents from at least three authors your documents will be compared against.</p>
+							<p>Add documents from at least three authors that may have written the anonymous document:</p>
 							<div class="col  s12">
 								<div class="col s12" style="    padding: 0; background-color:white;border: solid 1px #D1D1D1;border-radius:2px;">
 									<div class="col s4" style="background-color:#F4F5F6;border-right: 1px solid #D1D1D1;border-bottom-left-radius:2px;border-top-left-radius:2px;">

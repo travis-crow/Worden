@@ -21,14 +21,14 @@
 					</div>
 					
 					<div class="row center">
-						<h5 class="header col s12 light">Identify and obfuscate anonymous writings using stylometry</h5>
+						<h5 class="header col s12 light">Determine the true author of anonymous documents</h5>
 					</div>
 					<div class="row center">
 						<div class="col s12 l6" style="margin-bottom: 20px;">
 							<a href="../Worden/TestDocument" id="text-your-own-document-button" class="btn-large waves-effect waves-light purple">Test Your Own Document</a>
 						</div>
 						<div class="col s12 l6">
-							<a href="identify-anonymous-document/" id="identify-anonymous-document-button" class="btn-large waves-effect waves-light purple">Identify Anonymous Document</a>
+							<a href="../Worden/IdentifyDocument" id="identify-anonymous-document-button" class="btn-large waves-effect waves-light purple">Identify Anonymous Document</a>
 						</div>
 					</div>
 					<br>
@@ -55,12 +55,12 @@
 					<h4>Who made this tool?</h4>
 					<p>Worden is the combined effort of a small team at Drexel University guided by Rachel Greenstadt and Jeff Salvage. The team consists of (in alphabetical order):</p>
 					<ul>
-						<li><a href="http://barrowclift.me" class="purple-text">Marc Barrowclift</a></li>
-						<li>Travis Dutko</li>
-						<li>Corey Everitt</li>
-						<li>Jiakang Jin</li>
-						<li>Eric Nordstrom</li>
-						<li>Ivan "Frankie" Orrego</li>
+						<li><a href="http://barrowclift.me" class="purple-text">Marc Barrowclift</a> - Frontend developer, designer</li>
+						<li>Travis Dutko - Domain expert, additional JStylo development</li>
+						<li><a href="https://www.linkedin.com/in/coreyeveritt" class="purple-text">Corey Everitt</a> - Documenter, User Testing</li>
+						<li>Jiakang Jin - Additional JStylo development</li>
+						<li><a href="https://www.linkedin.com/in/eric-nordstrom-a1135269" class="purple-text">Eric Nordstrom</a> - Web app angular developer</li>
+						<li>Ivan "Frankie" Orrego - Documenter, User Testing</li>
 					</ul>
 					<p>Worden's core was built on JStylo, a previous project built at Drexel University.</p>
 				</div>

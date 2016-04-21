@@ -136,9 +136,27 @@ custom-chip:last-child {
 }
 
 
-.card-content ul li {
+.card {
+	height: 250px;
+	max-height: 250px;
+	min-height: 250px;
+}
+
+.card-wrapper ul {
+	width: 30em;
+}
+.card-wrapper ul li {
+	float: left;
+	width: 10em;
 	list-style-type: circle;
 	margin-left: 2em;
+}
+.card-wrapper ul li:before { content: '\2022 '; margin-left: -1em; margin-right: .65em;}
+.card-wrapper br {
+	clear: left;
+}
+div.card-wrapper {
+	margin-bottom:1em;
 }
 
 .underline {
