@@ -54,6 +54,9 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 	$scope.processResults = function (data) {
 		
 		var infoGainFeatures = $scope.results.InfoGain;
+		var featureTestDocCounts = $scope.results.FeatureTestDocCounts;
+		var featureOtherDocsAverageCounts = $scope.results.FeatureOtherDocsAverageCounts;
+		var featureOtherAuthorsAverageCounts = $scope.results.FeatureOtherAuthorsAverageCounts;
 		var featureLine = infoGainFeatures.split('\n');
 
 		var FEATURE_INDEX = 1;
@@ -68,14 +71,14 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 		var lettersAndLetterCombinationsCount = 0;
 		var functionWordsCount = 0;
 
-		createEmptyCard('misspelled-words', 'Misspelled Words');
-		createEmptyCard('words-and-word-combinations', 'Short Phrases');
-		createEmptyCard('function-words', "Common Words");
-		createEmptyCard('punctuation', "Punctuation");
-		createEmptyCard('unique-character', 'Unique Characters');
-		createEmptyCard('word-lengths', "Word Lengths");
-		createEmptyCard('number', 'Numbers');
-		createEmptyCard('letters-and-letter-combinations', "Letters");
+		createEmptyCard('misspelled-words', 'Misspelled Words', "Individuals may misspell certain words frequenly enough to risk being identified by their use.");
+		createEmptyCard('words-and-word-combinations', 'Words and Short Phrases', "Certain words and short phrases tend to be reused by individuals as a part of their writing style.");
+		createEmptyCard('function-words', "Function Words", "Function words are the top 512 utility words used by Koppel et al. in <a class=\"purple-text\" style=\"text-decoration:underline\" href=\"http://link.springer.com/chapter/10.1007%2F11427995_17\">\"Automatically determining an anonymous author's native language\"</a>");
+		createEmptyCard('punctuation', "Punctuation", "Individuals may use punctuation marks an abnormal number of times, enough to put them at risk (e.g., you end sentences with '?' frequently).");
+		createEmptyCard('unique-character', 'Unique Characters', "Individuals may use certain characters like parenthesis an abnormal number of times, enough to put them at risk.");
+		createEmptyCard('word-lengths', "Word Lengths", "Individuals sometimes tend towards longer or shorter words depending on their style, frequently enough to be at risk.");
+		createEmptyCard('letters-and-letter-combinations', "Letters", "Certain letters tend to be favored by individuals as part of their writing style (e.g. using 'ing' frequently)");
+		//createEmptyCard('number', 'Numbers');
 		
 		for (var i = 0; i < featureLine.length; i++) {
 			if (featureLine[i] === ">-----InfoGain information: " || featureLine[i] === "") {
@@ -93,24 +96,27 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 			var featureName = featureTokens[0];
 			var featureStyles = featureTokens[1];
 
-			if (featureName == "Digits" || featureName == "Two-Digit-Numbers" || featureName == "Three-Digit-Numbers") {
-				numbersCount++;
-				if (numbersCount > 12) {
-					continue;
-				}
-				createCard(featureStyles, 'number', 'Numbers', 'You seem to use the following numbers a lot in your writing, the topmost ones being the most revealing. Try removing as many of them as you can by generalizing them away, referring to them by pronouns, or converting them to their written form where possible in the document you want to anonymize:');
-			} else if (featureName == "Special-Characters") {
+			var featureTestDocCount = featureTestDocCounts[feature];
+			var featureOtherDocsAverageCount = featureOtherDocsAverageCounts[feature];
+			var featureOtherAuthorsAverageCount = featureOtherAuthorsAverageCounts[feature];
+
+			if (featureName == "Special-Characters") {
 				uniqueCharactersCount++;
 				if (uniqueCharactersCount > 12) {
 					continue;
 				}
-				createCard(featureStyles, 'unique-character', 'Unique Characters', 'You seem to use the following special characters a lot in your writing, the topmost ones being the most revealing. Try avoiding them or removing extraneous uses where possible in the document you want to anonymize:');
+				var feature = featureStyles.substring(0, featureStyles.length - 1);
+				var featureToDisplay = feature;
+				if (feature === '=') {
+					featureToDisplay = "Equals signs (=)";
+				}
+				addPremadeFeatureToCard(featureToDisplay, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, "unique-character");
 			} else if (featureName == "Misspelled-Words") {
 				misspelledWordsCount++;
 				if (misspelledWordsCount > 12) {
 					continue;
 				}
-				createCard(featureStyles, 'misspelled-words', 'Misspelled Words', 'You seem to misspell the following words frequently in your writing, the topmost ones being the most revealing. Try finding these misspellings and fixing them in the document you want to anonymize:');
+				addToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, 'misspelled-words');
 			} else if (featureName == "Punctuation") {
 				punctuationCount++;
 				if (punctuationCount > 12) {
@@ -135,30 +141,26 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 				} else if (feature === '!') {
 					featureToDisplay = "Exclamation marks (!)";
 				}
-				
-				if (document.getElementById("punctuation-card") == null) {
-					createEmptyCard("punctuation", "Punctuation");
-				} else {
-					$("#punctuation-list").append('<li>' + featureToDisplay + '</li>');
-				}
+				addPremadeFeatureToCard(featureToDisplay, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, "punctuation");
 			} else if (featureName == "Word-Lengths") {
 				wordLengthsCount++;
 				if (wordLengthsCount > 12) {
 					continue;
 				}
-				createCard(featureStyles, 'word-lengths', "Word Lengths", 'You seem to use words of the following lengths frequently in your writing, the topmost ones being the most revealing. Try finding words of these lengths in the document you want to anonymize and replacing them with longer or shorter synonyms:');
+				featureStyles = featureStyles.substring(0, featureStyles.length - 1) + " letters long";
+				addPremadeFeatureToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, "word-lengths");
 			} else if (featureName == "Letters" || featureName == "Top-Letter-bigrams" || featureName == "Top-Letter-trigrams") {
 				lettersAndLetterCombinationsCount++;
 				if (lettersAndLetterCombinationsCount > 12) {
 					continue;
 				}
-				createCard(featureStyles, 'letters-and-letter-combinations', "Letters", 'You seem to use the following letters and letter combinations frequently in your writing, the topmost ones being the most revealing. Try searching your document to anonymize for occurrences and removing them where possible:');
+				addToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, 'letters-and-letter-combinations');
 			} else if (featureName == "Function-Words") {
 				functionWordsCount++;
 				if (functionWordsCount > 12) {
 					continue;
 				}
-				createCard(featureStyles, 'function-words', "Common Words", 'You seem to use the following word combinations frequently in your writing, the topmost ones being the most revealing. Try rewording these phrases or avoiding them entirely in the document you want to anonymize:');
+				addToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, 'function-words');
 			} else if (featureName == "Words" || featureName == "Word-Bigrams" || featureName == "Word-Trigrams") {
 				wordsAndWordCombinationsCount++;
 				if (wordsAndWordCombinationsCount > 12) {
@@ -177,11 +179,13 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 						processedWords = processedWords + wordTokens[w] + " ";
 					}
 				}
-
-				$("#words-and-word-combinations-list").append('<li>' + processedWords + '</li>');
+				addPremadeFeatureToCard(processedWords, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, 'words-and-word-combinations');
 			}
 		}
 		
+		$.bigfoot({
+			actionOriginalFN: "hide",
+		});
 		removeAllEmptyCards();
 
 		// $("ul.tabs").tabs();
@@ -199,28 +203,54 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 		return (percentageAuthor2[0] - percentageAuthor1[0]);
 	}
 
-	function createCard(featureStyles, id, title, description) {
+	function addToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id) {
 		var feature = featureStyles.substring(0, featureStyles.length - 1);
 		if (document.getElementById(id+"-card") == null) {
-			createEmptyCard(id, title);
+			console.log("Card with id '" + id + "'' not found in DOM");
 		} else {
-			$("#"+id+"-list").append('<li>' + feature + '</li>');
+			addListItem(feature, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id);
 		}
 	}
+	
+	function addPremadeFeatureToCard(feature, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id) {
+		if (document.getElementById(id+"-card") == null) {
+			console.log("Card with id '" + id + "'' not found in DOM");
+		} else {
+			addListItem(feature, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id);
+		}
+	}
+	
+	function addListItem(feature, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id) {
+		var featureString = feature.trim();
+		if (featureOtherAuthorsAverageCount > featureTestDocCount) {
+			featureString = "<div class=\"feature-thing feature-green\">+</div> " + featureString;
+		} else {
+			featureString = "<div class=\"feature-thing feature-red\">-</div> " + featureString;
+		}
+		$("#"+id+"-list").append('<li data-hint=\"Your test document: '+featureTestDocCount+' occurrences&#xa;Your average: '+featureOtherDocsAverageCount+' occurrences&#xa;Random peer\'s average: '+featureOtherAuthorsAverageCount+' occurrences\" class=\"hint--top hint--bounce hint--rounded\">' + featureString + '</li>');
+	}
 
-	function createEmptyCard(id, title) {
+	function createEmptyCard(id, title, description) {
 		$("#suggestions").append('<div class="col s12 m6 l4" id="'+id+'-card">'
 								 + '<div class="card">'
 								  + '<div class="card-content">'
-								   + '<span class="card-title purple-text">'+title+'</span>'
+								   + '<span class="card-title purple-text">'
+									+ title
+									+ '<sup id="fnref:'+id+'">'
+									 + '<a href="#fn:'+id+'" rel="footnote">1</a>'
+									+ '</sup>'
+								   + '</span>'
 								   // + '<p>'+description+'</p>'
 								   + '<div class="card-wrapper">'
-								    + '<ul id="'+id+'-list">'
-								    + '</ul>'
-								    + '<br />'
+									+ '<ul id="'+id+'-list">'
+									+ '</ul>'
+									+ '<br />'
 								   + '</div'
 								  + '</div>'
 								 + '</div>');
+		$("#footnotes-list").append('<li class="footnote" id="fn:'+id+'">'
+									+ '<p>'+description+'<a href="#fnref:'+id+'"> RETURN</a></p>'
+								  + '</li>')
 	}
 	
 	function removeAllEmptyCards() {
@@ -230,9 +260,16 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 				var cardContent = $(this).children(0);
 				cardContent.children().each(function() {
 					if ($(this).is("ul")) {
+						var listId = $(this).attr('id');
 						// If the list is empty, there's no reason to have the card still, remove it.
 						if ($(this).children(0).size() == 0) {
+							// Remove the card
 							card.parent().remove();
+							
+							// Remove the card's description "footnote" (otherwise it appears
+							// at the bottom of the page instead, Ick.
+							var id = listId.substring(0, listId.indexOf('-list'));
+							$("#fn:"+id).remove();
 						}
 					}
 				});
@@ -240,26 +277,27 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 		});
 	}
 	
-	$scope.setSuspectedAuthor = function(){
+	$scope.setSuspectedAuthor = function() {
 		var currentHighest = 0.00;
 		var currentSuspect = "";
 		angular.forEach($scope.results.experimentContents[0].probabilityMap, function(value, key) {
-			var tmpValue = parseFloat(value[Object.keys(value)[0]]);
-			if (tmpValue > currentHighest){
-				console.log(Object.keys(value)[0]);
-				currentSuspect = Object.keys(value)[0];
+			var tmpValue = parseFloat(value.Probability);
+			if (tmpValue > currentHighest) {
+				currentSuspect = value.Author;
 				currentHighest = tmpValue;
 			}
 		});
 		
 		if (currentSuspect !== "userAuthor" && currentSuspect !== "testAuthor") {
-			$scope.verdict = "You remained anonymous for"
-			$scope.suspected = "you are not";
-			$scope.response = "Your features below are similar enough to the other writers that Worden cannot decide whether or not you're the true author. Congratulations!";
+			$scope.verdict = "Worden did not identify you as the author of"
+			$scope.response = "Your writing style features below are similar enough to the other writers that Worden incorrectly guessed the author of " + $scope.results.experimentContents[0].title;
+			$scope.responseInstructions = "To further";
+			$scope.responseAlignment = "left";
 		} else {
-			$scope.verdict = "You've been identified for"
-			$scope.suspected = "you are";
-			$scope.response = "Try adding more occurrences of the features below that are infrequently used and removing occurrences of features that appear frequently to make your document similar to the other suspects' documents, then process your document again.";
+			$scope.verdict = "You've been identified as the author of"
+			$scope.response = "Your writing style features below are unique enough when compared to the other provided works that Worden can correctly guess you as the true author of " + $scope.results.experimentContents[0].title;
+			$scope.responseInstructions = "To";
+			$scope.responseAlignment = "left";
 			//$scope.response = "You use the following features a unique number of times compared to the other writers. Try adding more occurrences of ones that appear infrequently and removing occurrences of ones that appear frequently to become more consistent with the other suspects then try processing your document again.";
 		}
 	};

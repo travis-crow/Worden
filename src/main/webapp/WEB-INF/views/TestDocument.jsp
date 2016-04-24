@@ -7,7 +7,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
 		<title>Worden - Test Your Own Document</title>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link href="<c:url value='/static/css/materialize.css' />" rel="stylesheet" " rel="stylesheet " />
+		<link href="<c:url value='/static/css/materialize.css' />" rel="stylesheet" />
+		<link href="<c:url value='/static/css/bigfoot-default.css' />" rel="stylesheet" />
+		<link href="<c:url value='/static/css/hint.css' />" rel="stylesheet" />
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js "></script>
 		<script src="<c:url value='/static/js/ng-file-upload.js' />" ></script>
 		<script src="<c:url value='/static/js/fileUploadController.js' />"></script>
@@ -63,9 +65,9 @@
 							<br>
 							<br>
 							<div class="file-field input-field" ng-show="testFile">
-								<p>Select at least two other similar documents you've written for Worden to learn how you usually write.</p>
+								<p>Select <strong style="text-decoration:underline;">at least ten</strong> other similar documents you've written for Worden to learn how you write.</p>
 								<ul style="color:#606C76;margin-left:1.2em;">
-									<li style="list-style-type: circle;">More documents yields more accurate results, ideally select around 10</li>
+									<li style="list-style-type: circle;">The more documents you provide the more accurate the results.</li>
 									<li style="list-style-type: circle;">Keep the document types similar. For example, if above you select a work email you wrote, add only other work emails</li>
 								</ul>
 								<div class="file-field input-field">
@@ -78,7 +80,7 @@
 												ng-model="otherFiles">
 											Add Other Documents
 										</button> -->
-									<div class="btn-large waves-effect waves-light purple col l4 s12" ngf-select="uploadFiles($files, $invalidFiles)" multiple ngf-max-height="1000" ngf-max-size="10MB" required ng-model="otherFiles">
+									<div class="btn-large waves-effect waves-light purple col l4 s12" ngf-min-files="10" ngf-select="uploadFiles($files, $invalidFiles)" ngf-keep="true" nfg-multiple="true" multiple ngf-max-total-size="10MB" required ng-model="otherFiles">
 										<span>Add Other Documents</span>
 										<input type="file" multiple>
 									</div>
@@ -95,7 +97,7 @@
 							</div>
 							<br>
 						</form>
-						<div ng-show="files" style="padding-top:10em;">
+						<div ng-show="files && testFile" style="padding-top:10em;">
 							<p>Do you have similar documents written by at least three other people you can provide?</p>
 							<div>
 								<p>
@@ -104,7 +106,7 @@
 								</p>
 								<p>
 									<input ng-click="selectUploadGenericSet()" name="radio-button-group" type="radio" id="does-not-have-author-documents" name="hasOtherDocuments" />
-									<label for="does-not-have-author-documents">No, I do not have other people's documents. (<span style="color:#C70631;">Results will not be accurate.</span> <span style="color:#606C76;"> In order to protect your identity Worden needs other potential suspects from your situation.</span>)</label>
+									<label for="does-not-have-author-documents">No, I do not have other people's documents. (<span class="red-text">Results will not be accurate.</span> <span style="color:#606C76;"> In order to protect your identity Worden needs other potential suspects from your situation.</span>)</label>
 								</p>
 							</div>
 						</div>
@@ -181,12 +183,14 @@
 				<div class="section" id="index-banner">
 					<h3 class="header center">Results</h3>
 				</div>
-				<div class="row">
-					<h4 style="color:#9B4DCA" class="header center">{{ verdict }} {{results.experimentContents[0].title}}</h4>
+				<div class="row" style="">
+					<h4 style="color:#9B4DCA" class="header center">{{ verdict }} {{ results.experimentContents[0].title }}</h4>
 					<div class="container">
 						<!-- <p class="center">Worden believes <strong id="suspectedAuthor" style="text-decoration:underline;">{{suspected}}</strong> the true author of <strong class="documentName">{{results.experimentContents[0].title}}</strong> among the <strong id="numberOfAuthors"></strong> other authors. </p> -->
-						<p>{{ response }}</p>
+						<p class="{{ responseAlignment }}">{{ response }}</p>
+						<p class="{{ responseAlignment }}">{{ responseInstructions }} improve your chances of anonymity, try <span style="text-decoration:underline;">removing features</span> with <span class="feature-thing feature-red">-</span> from your document to anonymize and <span style="text-decoration:underline;">adding features</span> with <span class="feature-thing feature-green">+</span> to better emulate other writers' styles.</p>
 					</div>
+					<br>
 					<div class="row" id="suggestions">
 					</div>
 				</div>
@@ -216,6 +220,10 @@
 				</div>
 			</div>
 		</main>
+		<div class="footnotes">
+			<ol id="footnotes-list">
+			</ol>
+		</div>
 		<footer class="page-footer white">
 			<div class="container">
 				<div class="row">
@@ -227,6 +235,12 @@
 		</footer>
 		<!-- Scripts -->
 		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="<c:url value='/static/js/bigfoot.js' />"></script>
+		<script type="text/javascript">
+			$.bigfoot({
+				actionOriginalFN: "hide",
+			});
+		</script>
 		<script src="<c:url value='/static/js/materialize.js' />"></script>
 	</body>
 
