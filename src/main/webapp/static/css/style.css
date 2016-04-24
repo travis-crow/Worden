@@ -137,30 +137,37 @@ custom-chip:last-child {
 
 
 .card {
-	height: 250px;
-	max-height: 250px;
-	min-height: 250px;
+	height: 280px;
+	max-height: 280px;
+	min-height: 280px;
 }
 
 .card-wrapper ul {
-	width: 30em;
+	width: 22em;/* 30em; */
 }
 .card-wrapper ul li {
 	float: left;
-	width: 10em;
+	width: 9.5em;/* 10em; */
 	list-style-type: circle;
-	margin-left: 2em;
+	margin-left: 1em;
+	margin-bottom: 5px;
 }
-.card-wrapper ul li:before { content: '\2022 '; margin-left: -1em; margin-right: .65em;}
+/* .card-wrapper ul li:before { content: '\2022 '; margin-left: -1em; margin-right: .65em;} */
 .card-wrapper br {
 	clear: left;
 }
-div.card-wrapper {
-	margin-bottom:1em;
+#suggestions {
+	width: 96%;
 }
 
 .underline {
 	text-decoration: underline;
+}
+.card-wrapper ul li {
+	transition: background-color 0.2s ease;
+}
+.card-wrapper ul li:hover {
+	background-color:#F4F5F6;	
 }
 
 
@@ -401,4 +408,26 @@ html, label {
 .adjective {
 	color: #7DB801;
 	font-weight:500;
+}
+
+.green-text {
+	color: #84C34B;
+}
+.red-text {
+	color: #C70631;
+}
+.feature-green {
+	background-color: #84C34B;
+	padding-left: 0.35em;
+}
+.feature-red {
+	background-color: #C70631;
+	padding-left: 0.5em;
+}
+.feature-thing {
+	display:inline-block;
+	border-radius:2px;
+	color: white;
+	width: 1.3em;
+	margin-right: 0.3em;
 }
