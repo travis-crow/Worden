@@ -39,14 +39,12 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 	}
 	
 	$scope.setFile = function() {
-		if (angular.isUndefined($scope.currentAuthor.Files)) {
+		if(angular.isUndefined($scope.currentAuthor.Files)){
 			$scope.currentAuthor.Files = [];
 		}
-		if (!angular.isUndefined($scope.currentAuthor.UploadFile) && $scope.currentAuthor.UploadFile !== null) {
-			console.log("HERE");
-			$scope.currentAuthor.Files.push.apply($scope.currentAuthor.Files, $scope.currentAuthor.UploadFile);			
+		if(!angular.isUndefined($scope.currentAuthor.UploadFile) && $scope.currentAuthor.UploadFile !== null){
+			$scope.currentAuthor.Files.push($scope.currentAuthor.UploadFile);			
 		}
-		console.log($scope.currentAuthor.Files);
 		$scope.currentAuthor.UploadFile = {};
 	}
 	
