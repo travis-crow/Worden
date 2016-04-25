@@ -163,7 +163,7 @@
 										</div>									
 									</div>
 									<div ng-show="currentAuthor" class="col s4">
-										<div style="cursor:pointer;font-size:15px;margin-top: 0.65em;" type="file" ng-change="setFile()" ngf-select multiple ngf-keep="true" ngf-multiple="true" ng-model="currentAuthor.UploadFile" class="center purple-text">Add To {{currentAuthor.Name}}'s Documents</div>
+										<div style="cursor:pointer;font-size:15px;margin-top: 0.65em;"  type="file" ng-change="setFile()" ngf-select ng-model="currentAuthor.UploadFile" class="center purple-text">Add To {{currentAuthor.Name}}'s Documents</div>
 										<div class="custom-chip" ng-show="file" ng-repeat="file in currentAuthor.Files" style="display:inline-block;">
 											<button class="custom-chip-delete-button" ng-click="file = null">
 												<i class="tiny material-icons">close</i>
