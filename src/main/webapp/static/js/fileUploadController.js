@@ -42,9 +42,12 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 		if(angular.isUndefined($scope.currentAuthor.Files)){
 			$scope.currentAuthor.Files = [];
 		}
-		$scope.currentAuthor.Files.push($scope.currentAuthor.UploadFile);
+		if(!angular.isUndefined($scope.currentAuthor.UploadFile) && $scope.currentAuthor.UploadFile !== null){
+			$scope.currentAuthor.Files.push($scope.currentAuthor.UploadFile);			
+		}
 		$scope.currentAuthor.UploadFile = {};
 	}
+	
 	$scope.selectUploadGenericSet = function () {
 		$scope.uploadAuthors = false;
 		$scope.uploadGenericSet = true;
@@ -310,7 +313,8 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 				 data: {
 					 files: $scope.files,
 					 test: $scope.testFile,
-					 type: $scope.type
+					 type: $scope.type,
+					 authors: $scope.authors
 				 }
 			 }).then(function (response) {
 				 $timeout(function () {
