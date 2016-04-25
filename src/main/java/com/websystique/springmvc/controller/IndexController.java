@@ -2,6 +2,7 @@ package com.websystique.springmvc.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,6 +34,7 @@ import edu.drexel.psal.jstylo.generics.FullAPI.analysisType;
 import edu.drexel.psal.jstylo.featureProcessing.ProblemSet;
 import edu.drexel.psal.jstylo.machineLearning.weka.WekaAnalyzer;
 
+
 @Controller
 @RequestMapping("/")
 public class IndexController {
@@ -61,7 +63,7 @@ public class IndexController {
 
 	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = "/StartProcess", method = RequestMethod.POST)
-	public @ResponseBody String startProcess(MultipartHttpServletRequest request, @RequestParam("type") String type) throws IOException {
+	public @ResponseBody String startProcess(MultipartHttpServletRequest request, @RequestParam(value = "type", required = false) String type) throws IOException {
 
 		ProblemSet ps = new ProblemSet();
 		ps.setTrainCorpusName("Worden Experiment");
@@ -69,6 +71,9 @@ public class IndexController {
 		String testDir = request.getServletContext().getRealPath("/TestDocument/");
 		String refDir = request.getServletContext().getRealPath("/TrainDocuments/");
 
+		Enumeration<String> authors = request.getParameterNames();
+		
+		
 		File testFile = new File(testDir);
 		if (!testFile.exists()) {
 			testFile.mkdir();
@@ -79,9 +84,7 @@ public class IndexController {
 			refFile.mkdir();
 		}
 
-		//TODO need to make these paths relative / internal
-		/* String testDir = "/Users/Eric/Documents/TestDocument/";///request.getServletContext().getRealPath("/TestDocument/");
-		String refDir = "/Users/Eric/Documents/References/";//request.getServletContext().getRealPath("/References/");*/
+	
 		String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
 		System.out.println("Temporary File Directory: " + refDir);
 
@@ -90,7 +93,14 @@ public class IndexController {
 		while (itr.hasNext()) {
 			String uploadedFile = itr.next();
 			MultipartFile file = request.getFile(uploadedFile);
-			if (!itr.hasNext()) {
+			
+			if(uploadedFile.contains("author")){
+				System.out.println("Adding train document: " + file.getOriginalFilename());
+				int closeBracket = uploadedFile.indexOf(']'); // example authors[0].files[0] // just includes authors[0]
+				String authorString = uploadedFile.substring(0,closeBracket + 1);
+				ps.addTrainDoc(authorString, makeDoc(file, userAuthor, refDir));
+			}
+			else if(uploadedFile.contains("test")) {
 				System.out.println("Adding test document: " + file.getOriginalFilename());
 				ps.addTestDoc(userAuthor, makeDoc(file, userAuthor, testDir));
 				testDocument = file.getOriginalFilename();
