@@ -145,10 +145,7 @@
 										<div class="row">
 											<div class="col s12" style="padding-top:6px;">
 												<a href="" ng-click="addAuthor()" id="create-author" class="btn-flat center purple-text" style="display: block; width: 100%;">Create Author</a>
-												<input id="add-documents" class="btn-flat center purple-text" type="button" value="Add Documents" style="=display: block; width: 100%;">
-												<a href="" id="rename-author" class="btn-flat center purple-text" style="display: block; width: 100%;">Rename Author</a>
-												<a href="" id="remove" class="btn-flat center purple-text" style="display: block; width: 100%;">Remove</a>
-												<a href="" id="remove-all" class="btn-flat center purple-text" style="display: block; width: 100%;">Remove All</a>
+												<a href="" id="remove-all" ng-click="removeAllAuthors()" class="btn-flat center purple-text" style="display: block; width: 100%;">Remove All</a>
 												<input name="add-documents" id="add-documents-input" type="file" multiple="" style="visibility:hidden">
 											</div>
 										</div>
@@ -158,13 +155,19 @@
 											<input type="text" ng-model="addNewAuthorName" placeholder="Name">
 											<button ng-click="submitNewAuthor()" class="btn waves-effect waves-light purple">Add</button>
 										</div>
-										<div ng-repeat="author in authors">
-											<div ng-class="" ng-click="selectAuthor($index)" style="padding:0" class="btn-flat "><i style="margin-right:5px;" class="fa fa-user"></i>{{author.Name}}</div>
-										</div>
+										<div ng-hide="addNewAuthor" ng-click="selectAuthor($index)" style="cursor:pointer;" class="custom-chip" ng-show="author" ng-repeat="author in authors" style="display:inline-block;">
+											<button class="custom-chip-delete-button" ng-click="removeAuthor($index)">
+												<i class="tiny material-icons">close</i>
+											</button>
+											{{author.Name}}
+										</div>									
 									</div>
 									<div ng-show="currentAuthor" class="col s4">
-										<div style="cursor:pointer;font-size:15px" type="file" ng-change="setFile()" ngf-select ng-model="currentAuthor.UploadFile" class="center purple-text">Add To {{currentAuthor.Name}}'s Documents</div>
-										<div ng-repeat="file in currentAuthor.Files">
+										<div style="cursor:pointer;font-size:15px;margin-top: 0.65em;"  type="file" ng-change="setFile()" ngf-select ng-model="currentAuthor.UploadFile" class="center purple-text">Add To {{currentAuthor.Name}}'s Documents</div>
+										<div class="custom-chip" ng-show="file" ng-repeat="file in currentAuthor.Files" style="display:inline-block;">
+											<button class="custom-chip-delete-button" ng-click="file = null">
+												<i class="tiny material-icons">close</i>
+											</button>
 											{{file.name}}
 										</div>
 									</div>

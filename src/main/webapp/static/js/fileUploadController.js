@@ -53,7 +53,17 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 		$scope.uploadGenericSet = true;
 	}
 	
+	$scope.removeAllAuthors = function(){
+		$scope.currentAuthor = false;
+		$scope.authors = [];
+	}
 	
+	$scope.removeAuthor = function(index){
+		if($scope.currentAuthor.Name == $scope.authors[index].Name ){
+			$scope.currentAuthor = null;
+		}
+		$scope.authors[index] = null;
+	}
 	$scope.processResults = function (data) {
 		
 		var infoGainFeatures = $scope.results.InfoGain;
