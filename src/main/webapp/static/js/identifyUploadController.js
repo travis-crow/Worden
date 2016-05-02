@@ -1,16 +1,13 @@
 //inject angular file upload directives and services.
 var app = angular.module('fileUpload', ['ngFileUpload']);
 
-app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
 	
 	$scope.authors = [];
 	$scope.results = false;
 	$scope.loading = false;
 	$scope.addNewAuthor = false;
 	$scope.currentAuthorIndex;
-	$scope.uploadFiles = function (files) {
-		$scope.files = files;
-	};
 	
 	$scope.uploadAuthors = false;
 	$scope.uploadGenericSet = false;
@@ -90,12 +87,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 		}
 		$scope.currentAuthor.UploadFile = {};
 	}
-	
-	$scope.selectUploadGenericSet = function () {
-		$scope.uploadAuthors = false;
-		$scope.uploadGenericSet = true;
-	}
-	
+
 	$scope.removeAllAuthors = function() {
 		$scope.currentAuthor = null;
 		$scope.authors = [];
@@ -296,7 +288,6 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 									 + '<a href="#fn:'+id+'" rel="footnote">1</a>'
 									+ '</sup>'
 								   + '</span>'
-								   // + '<p>'+description+'</p>'
 								   + '<div class="card-wrapper">'
 									+ '<ul id="'+id+'-list">'
 									+ '</ul>'
@@ -354,36 +345,29 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 			$scope.response = "Your writing style features below are unique enough when compared to the other provided works that Worden can correctly guess you as the true author of " + $scope.results.experimentContents[0].title;
 			$scope.responseInstructions = "To";
 			$scope.responseAlignment = "left";
-			//$scope.response = "You use the following features a unique number of times compared to the other writers. Try adding more occurrences of ones that appear infrequently and removing occurrences of ones that appear frequently to become more consistent with the other suspects then try processing your document again.";
 		}
 	};
 	
 	$scope.startUpload = function() {
 		$scope.loading = true;
-		 if ($scope.files && $scope.files.length) {
-			 Upload.upload({
-				 url: '/Worden/StartProcess',
-				 data: {
-					 files: $scope.files,
-					 test: $scope.testFile,
-					 type: $scope.type,
-					 authors: $scope.authors
-				 }
-			 }).then(function (response) {
-				 $timeout(function () {
-				$scope.results	= angular.copy(response.data);
-					 $scope.processResults();
-					 $scope.setSuspectedAuthor();
-					 $scope.loading = false;
-					 
-				 });
-			 }, function (response) {
-				 if (response.status > 0) {
-					 $scope.errorMsg = response.status + ': ' + response.data;
-				 }
-			 }, function (evt) {
-			   
-			 });
-		 }
+		Upload.upload({
+			url: '/Worden/StartIdentifyProcess',
+			data: {
+				test: $scope.testFile,
+				type: $scope.type,
+				authors: $scope.authors
+			}
+		}).then(function (response) {
+			$timeout(function () {
+			$scope.results	= angular.copy(response.data);
+				$scope.processResults();
+				$scope.setSuspectedAuthor();
+				$scope.loading = false; 
+			});
+		}, function (response) {
+			if (response.status > 0) {
+				$scope.errorMsg = response.status + ': ' + response.data;
+			}
+		}, function (evt) {});
 	};
 }]);
