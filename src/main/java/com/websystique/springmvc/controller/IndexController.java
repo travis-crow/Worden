@@ -2,9 +2,11 @@ package com.websystique.springmvc.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -26,6 +28,7 @@ import com.google.gson.JsonObject;
 import com.jgaap.generics.Document;
 
 import edu.drexel.psal.jstylo.generics.DataMap;
+import edu.drexel.psal.jstylo.generics.DocResult;
 import edu.drexel.psal.jstylo.generics.DocumentData;
 import edu.drexel.psal.jstylo.generics.FeatureData;
 import edu.drexel.psal.jstylo.generics.FullAPI;
@@ -64,7 +67,6 @@ public class IndexController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = "/StartProcess", method = RequestMethod.POST)
 	public @ResponseBody String startProcess(MultipartHttpServletRequest request, @RequestParam(value = "type", required = false) String type) throws IOException {
-
 		ProblemSet ps = new ProblemSet();
 		ps.setTrainCorpusName("Worden Experiment");
 		Iterator <String> itr = request.getFileNames();
@@ -94,13 +96,12 @@ public class IndexController {
 			String uploadedFile = itr.next();
 			MultipartFile file = request.getFile(uploadedFile);
 			
-			if(uploadedFile.contains("author")){
+			if (uploadedFile.contains("author")) {
 				System.out.println("Adding train document: " + file.getOriginalFilename());
 				int closeBracket = uploadedFile.indexOf(']'); // example authors[0].files[0] // just includes authors[0]
 				String authorString = uploadedFile.substring(0,closeBracket + 1);
 				ps.addTrainDoc(authorString, makeDoc(file, userAuthor, refDir));
-			}
-			else if(uploadedFile.contains("test")) {
+			} else if(uploadedFile.contains("test")) {
 				System.out.println("Adding test document: " + file.getOriginalFilename());
 				ps.addTestDoc(userAuthor, makeDoc(file, userAuthor, testDir));
 				testDocument = file.getOriginalFilename();
@@ -136,16 +137,13 @@ public class IndexController {
 		}
 
 		//switch on essay/email/tweet dbs
-
 		System.out.println("Problem Set XML\n" + ps.toXMLString());
-		FullAPI fullApi = new Builder()
-			.cfdPath(xml)
-			.ps(ps)
-			.setAnalyzer(new WekaAnalyzer())
-			.numThreads(1)
-			.analysisType(analysisType.TRAIN_TEST_KNOWN)
-			.build();
-
+		FullAPI fullApi =  new Builder().cfdPath(xml)
+										.ps(ps)
+										.setAnalyzer(new WekaAnalyzer())
+										.numThreads(1)
+										.analysisType(analysisType.TRAIN_TEST_KNOWN)
+										.build();
 		fullApi.prepareInstances();
 		fullApi.calcInfoGain();
 		fullApi.run();
@@ -226,6 +224,127 @@ public class IndexController {
 		JsonObject json = fullApi.getResults().toJson();
 		json.addProperty("InfoGain", fullApi.getReadableInfoGain(false));
 		json.add("FeatureTestDocCounts", jsonTestDocCounts);
+		json.add("FeatureOtherDocsAverageCounts", jsonOtherDocsAverageCounts);
+		json.add("FeatureOtherAuthorsAverageCounts", jsonOtherAuthorsAverageCounts);
+		return json.toString();
+	}
+	
+	@ResponseStatus(value = HttpStatus.OK)
+	@RequestMapping(value = "/StartIdentifyProcess", method = RequestMethod.POST)
+	public @ResponseBody String startIdentifyProcess(MultipartHttpServletRequest request, @RequestParam(value = "type", required = false) String type) throws IOException {
+		ProblemSet ps = new ProblemSet();
+		ps.setTrainCorpusName("Worden Experiment");
+		Iterator <String> itr = request.getFileNames();
+		String testDir = request.getServletContext().getRealPath("/TestDocument/");
+		String refDir = request.getServletContext().getRealPath("/TrainDocuments/");
+
+		Enumeration<String> authors = request.getParameterNames();
+		
+		
+		File testFile = new File(testDir);
+		if (!testFile.exists()) {
+			testFile.mkdir();
+		}
+
+		File refFile = new File(refDir);
+		if (!refFile.exists()) {
+			refFile.mkdir();
+		}
+
+	
+		String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
+		System.out.println("Temporary File Directory: " + refDir);
+
+		//TODO is the document to identify always at a specific index? 
+		//Surely there's a better way to determine which is which than whether or not we're at the end of the iterator
+		while (itr.hasNext()) {
+			String uploadedFile = itr.next();
+			MultipartFile file = request.getFile(uploadedFile);
+			
+			if (uploadedFile.contains("author")) {
+				System.out.println("Adding train document: " + file.getOriginalFilename());
+				int closeBracket = uploadedFile.indexOf(']'); // example authors[0].files[0] // just includes authors[0]
+				String authorString = uploadedFile.substring(0,closeBracket + 1);
+				ps.addTrainDoc(authorString, makeDoc(file, userAuthor, refDir));
+			} else if(uploadedFile.contains("test")) {
+				System.out.println("Adding test document: " + file.getOriginalFilename());
+				testDocument = file.getOriginalFilename();
+				ps.addTestDoc(userAuthor, makeDoc(file, userAuthor, testDir));
+				testDocument = file.getOriginalFilename();
+			}
+		}
+
+		//switch on essay/email/tweet dbs
+		System.out.println("Problem Set XML\n" + ps.toXMLString());
+		FullAPI fullApi =  new Builder().cfdPath(xml)
+										.ps(ps)
+										.setAnalyzer(new WekaAnalyzer())
+										.numThreads(1)
+										.analysisType(analysisType.TRAIN_TEST_UNKNOWN)
+										.build();
+		fullApi.prepareInstances();
+		fullApi.calcInfoGain();
+		fullApi.run();
+
+		// Counting features in the author's test document
+		ConcurrentHashMap<String, DocumentData> featureDataMap = null;
+		JsonObject jsonOtherDocsAverageCounts = new JsonObject();
+		JsonObject jsonOtherAuthorsAverageCounts = new JsonObject();
+		DataMap otherDocsDataMap = fullApi.getTrainingDataMap(); // ALL other docs (include user's other docs)
+		HashMap<String, Double> randomAuthorsAverageCounts = new HashMap<String, Double>();
+		Random randomAuthorsFeatures = new Random();
+		for (Entry<String, ConcurrentHashMap<String, DocumentData>> authorEntry : otherDocsDataMap.getDataMap().entrySet()) {
+			String authorName = authorEntry.getKey();
+			// Averaging feature counts in the user's "Other Documents"
+			if (authorName.equals(userAuthor)) {
+				featureDataMap = authorEntry.getValue();
+				for (Entry <Integer, String> featureEntry: otherDocsDataMap.getFeatures().entrySet()) {
+					String feature = featureEntry.getValue();
+					double featureCount = 0.0;
+					double numOfOtherDocs = 0.0;
+					for (Entry <String, DocumentData> otherDocumentsEntry: featureDataMap.entrySet()) {
+						numOfOtherDocs++;
+						FeatureData featureData = otherDocumentsEntry.getValue().getDataValues().get(featureEntry.getKey());
+						if (featureData != null) {
+							featureCount += featureData.getCount();
+						}
+					}
+					double featureAverage = featureCount / numOfOtherDocs;
+					featureAverage = Math.round(featureAverage * 100.0) / 100.0;
+					jsonOtherDocsAverageCounts.addProperty(feature, featureAverage);
+				}
+			// Averaging feature counts for random other author's documents
+			// (OR, one that has feature counts if all other authors have 0 counts, this
+			// should be safe enough to keep us away from becoming a plagerism tool)
+			} else {
+				featureDataMap = authorEntry.getValue();
+				for (Entry <Integer, String> featureEntry: otherDocsDataMap.getFeatures().entrySet()) {
+					String feature = featureEntry.getValue();
+					double featureCount = 0.0;
+					double numOfOtherDocs = 0.0;
+					for (Entry <String, DocumentData> otherDocumentsEntry: featureDataMap.entrySet()) {
+						numOfOtherDocs++;
+						FeatureData featureData = otherDocumentsEntry.getValue().getDataValues().get(featureEntry.getKey());
+						if (featureData != null) {
+							featureCount += featureData.getCount();
+						}
+					}
+					double featureAverage = featureCount / numOfOtherDocs;
+					Double average = randomAuthorsAverageCounts.get(feature);
+					if (average == null || average.equals(0.0) || (featureAverage > 0.0 && randomAuthorsFeatures.nextBoolean())) {
+						randomAuthorsAverageCounts.put(feature, featureAverage);
+					}
+				}
+			}
+		}
+		for (Entry<String, Double> featureAverage : randomAuthorsAverageCounts.entrySet()) {
+			String feature = featureAverage.getKey();
+			double average = Math.round(featureAverage.getValue() * 100.0) / 100.0;
+			jsonOtherAuthorsAverageCounts.addProperty(feature, average);
+		}
+		
+		JsonObject json = fullApi.getResults().toJson();
+		json.addProperty("InfoGain", fullApi.getReadableInfoGain(false));
 		json.add("FeatureOtherDocsAverageCounts", jsonOtherDocsAverageCounts);
 		json.add("FeatureOtherAuthorsAverageCounts", jsonOtherAuthorsAverageCounts);
 		return json.toString();
