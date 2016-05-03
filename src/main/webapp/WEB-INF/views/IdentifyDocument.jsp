@@ -10,12 +10,12 @@
 		<link href="<c:url value='/static/css/materialize.css' />" rel="stylesheet" " rel="stylesheet " />
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js "></script>
 		<script src="<c:url value='/static/js/ng-file-upload.js' />" ></script>
-		<script src="<c:url value='/static/js/fileUploadController.js' />"></script>
+		<script src="<c:url value='/static/js/identifyUploadController.js' />"></script>
 		<link href="<c:url value='/static/css/style.css' />" rel="stylesheet" rel="stylesheet" />
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	</head>
 
-	<body ng-app="fileUpload" ng-controller="fileUploadController">
+	<body ng-app="fileUpload" ng-controller="identifyUploadController">
 		<header>
 			<nav class="white" role="navigation">
 				<div class="nav-wrapper" style="margin-left: 1em;">
@@ -64,39 +64,40 @@
 					<div id="uploadAuthors" ng-show="testFile">
 						<br>
 						<div class="row">
-							<p>Add documents from at least three authors that may have written the anonymous document:</p>
+							<p>Add documents from at least three authors your documents will be compared against.</p>
 							<div class="col  s12">
-								<div class="col s12" style="    padding: 0; background-color:white;border: solid 1px #D1D1D1;border-radius:2px;">
-									<div class="col s4" style="background-color:#F4F5F6;border-right: 1px solid #D1D1D1;border-bottom-left-radius:2px;border-top-left-radius:2px;">
-										<div class="row">
-											<div class="col s12" style="padding-top:6px;">
-												<a href="" ng-click="addAuthor()" id="create-author" class="btn-flat center purple-text" style="display: block; width: 100%;">Create Author</a>
-												<input id="add-documents" class="btn-flat center purple-text" type="button" value="Add Documents" style="=display: block; width: 100%;">
-												<a href="" id="rename-author" class="btn-flat center purple-text" style="display: block; width: 100%;">Rename Author</a>
-												<a href="" id="remove" class="btn-flat center purple-text" style="display: block; width: 100%;">Remove</a>
-												<a href="" id="remove-all" class="btn-flat center purple-text" style="display: block; width: 100%;">Remove All</a>
-												<input name="add-documents" id="add-documents-input" type="file" multiple="" style="visibility:hidden">
+								<div class="col s12" style="padding:0;overflow:hidden;height:200px;background-color:white;border: solid 1px #D1D1D1;border-radius:2px;">
+									<div class="col s6" style="height:100%;border-right: 1px solid #D1D1D1;padding-left:0px;padding-right:0px;">
+										<a href="" ng-click="addAuthor()" id="create-author" class="center btn waves-effect waves-light purple" style="text-transform: inherit; display: block; width: 100%;border-radius:0px;border-top-left-radius:1px;">Create Author</a>
+										<div style="padding-top:0.5em;padding-left:0.5em;padding-right:0.5em;height:100%;overflow-y: scroll;padding-bottom:1em;">
+											<div ng-click="selectAuthor($index)" ng-class="authors[$index].Selected"  style="cursor:pointer;" class="custom-chip" ng-show="author" ng-repeat="author in authors" style="display:inline-block;">
+												<button class="custom-chip-delete-button" ng-click="removeAuthor($index)">
+													<i class="tiny material-icons">close</i>
+												</button>
+												{{author.Name}}
+											</div>
+											<div ng-show="addNewAuthor">
+												<input ng-keypress="checkIfEnterKeyWasPressed($event)" type="text" ng-model="addNewAuthorName" placeholder="Name">
+												<button ng-click="submitNewAuthor()" class="btn waves-effect waves-light purple">Add</button>
+												<button ng-click="clearNewAuthor()" class="btn waves-effect waves-light purple">Cancel</button>
 											</div>
 										</div>
 									</div>
-									<div class="col s4">
-										<div ng-show="addNewAuthor">
-											<input type="text" ng-model="addNewAuthorName" placeholder="Name">
-											<button ng-click="submitNewAuthor()" class="btn waves-effect waves-light purple">Add</button>
-										</div>
-										<div ng-repeat="author in authors">
-											<div ng-class="" ng-click="selectAuthor($index)" style="padding:0" class="btn-flat "><i style="margin-right:5px;" class="fa fa-user"></i>{{author.Name}}</div>
-										</div>
-									</div>
-									<div ng-show="currentAuthor" class="col s4">
-										<div style="cursor:pointer;font-size:15px" type="file" ng-change="setFile()" ngf-select ng-model="currentAuthor.UploadFile" class="center purple-text">Add To {{currentAuthor.Name}}'s Documents</div>
-										<div ng-repeat="file in currentAuthor.Files">
-											{{file.name}}
+									<div ng-show="currentAuthor" class="col s6" style="padding-left:0px;padding-right:0px;">
+										<div style="cursor:pointer;text-transform: inherit; display: block; width: 100%;border-radius:0px;border-top-right-radius:1px;" type="file" ng-change="setFile()" ngf-select multiple ngf-multiple="true" ng-model="currentAuthor.UploadFile" class="center btn waves-effect waves-light purple">Add To {{currentAuthor.Name}}'s Documents</div>
+										<div style="padding-top:0.5em;padding-left:0.5em;padding-right:0.5em;height:100%;overflow-y: scroll;padding-bottom:3em;">
+											<div class="custom-chip" ng-show="file" ng-repeat="file in currentAuthor.Files" style="display:inline-block;">
+												<button class="custom-chip-delete-button" ng-click="removeOtherAuthorsDoc(file)">
+													<i class="tiny material-icons">close</i>
+												</button>
+												{{file.name}}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<br>
 						<div class="row">
 							<div class="col s12">
 								<button ng-click="startUpload()" id="text-your-own-document-next-page" class="btn waves-effect waves-light purple">Start</button>
