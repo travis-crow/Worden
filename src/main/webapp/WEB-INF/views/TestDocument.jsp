@@ -71,15 +71,6 @@
 									<li style="list-style-type: circle;">Keep the document types similar. For example, if above you select a work email you wrote, add only other work emails</li>
 								</ul>
 								<div class="file-field input-field">
-									<!-- <button class="btn-large waves-effect waves-light purple col l4 s12" 
-												ngf-select="uploadFiles($files, $invalidFiles)"
-												multiple
-												ngf-max-height="1000"
-												ngf-max-size="10MB"
-												required
-												ng-model="otherFiles">
-											Add Other Documents
-										</button> -->
 									<div class="btn-large waves-effect waves-light purple col l4 s12" ngf-min-files="10" ngf-select="uploadFiles($files, $invalidFiles)" ngf-keep="true" ngf-multiple="true" multiple ngf-max-total-size="10MB" required ng-model="otherFiles">
 										<span>Add Other Documents</span>
 										<input type="file" multiple>
@@ -140,40 +131,38 @@
 						<div class="row">
 							<p>Add documents from at least three authors your documents will be compared against.</p>
 							<div class="col  s12">
-								<div class="col s12" style="    padding: 0; background-color:white;border: solid 1px #D1D1D1;border-radius:2px;">
-									<div class="col s4" style="background-color:#F4F5F6;border-right: 1px solid #D1D1D1;border-bottom-left-radius:2px;border-top-left-radius:2px;">
-										<div class="row">
-											<div class="col s12" style="padding-top:6px;">
-												<a href="" ng-click="addAuthor()" id="create-author" class="btn-flat center purple-text" style="display: block; width: 100%;">Create Author</a>
-												<a href="" id="remove-all" ng-click="removeAllAuthors()" class="btn-flat center purple-text" style="display: block; width: 100%;">Remove All</a>
-												<input name="add-documents" id="add-documents-input" type="file" multiple="" style="visibility:hidden">
+								<div class="col s12" style="padding:0;overflow:hidden;height:200px;background-color:white;border: solid 1px #D1D1D1;border-radius:2px;">
+									<div class="col s6" style="height:100%;border-right: 1px solid #D1D1D1;padding-left:0px;padding-right:0px;">
+										<a href="" ng-click="addAuthor()" id="create-author" class="center btn waves-effect waves-light purple" style="text-transform: inherit; display: block; width: 100%;border-radius:0px;border-top-left-radius:1px;">Create Author</a>
+										<div style="padding-top:0.5em;padding-left:0.5em;padding-right:0.5em;height:100%;overflow-y: scroll;padding-bottom:1em;">
+											<div ng-click="selectAuthor($index)" ng-class="authors[$index].Selected"  style="cursor:pointer;" class="custom-chip" ng-show="author" ng-repeat="author in authors" style="display:inline-block;">
+												<button class="custom-chip-delete-button" ng-click="removeAuthor($index)">
+													<i class="tiny material-icons">close</i>
+												</button>
+												{{author.Name}}
+											</div>
+											<div ng-show="addNewAuthor">
+												<input ng-keypress="checkIfEnterKeyWasPressed($event)" type="text" ng-model="addNewAuthorName" placeholder="Name">
+												<button ng-click="submitNewAuthor()" class="btn waves-effect waves-light purple">Add</button>
+												<button ng-click="clearNewAuthor()" class="btn waves-effect waves-light purple">Cancel</button>
 											</div>
 										</div>
 									</div>
-									<div class="col s4">
-										<div ng-show="addNewAuthor">
-											<input type="text" ng-model="addNewAuthorName" placeholder="Name">
-											<button ng-click="submitNewAuthor()" class="btn waves-effect waves-light purple">Add</button>
-										</div>
-										<div ng-hide="addNewAuthor" ng-click="selectAuthor($index)" style="cursor:pointer;" class="custom-chip" ng-show="author" ng-repeat="author in authors" style="display:inline-block;">
-											<button class="custom-chip-delete-button" ng-click="removeAuthor($index)">
-												<i class="tiny material-icons">close</i>
-											</button>
-											{{author.Name}}
-										</div>									
-									</div>
-									<div ng-show="currentAuthor" class="col s4">
-										<div style="cursor:pointer;font-size:15px;margin-top: 0.65em;"  type="file" ng-change="setFile()" ngf-select ng-model="currentAuthor.UploadFile" class="center purple-text">Add To {{currentAuthor.Name}}'s Documents</div>
-										<div class="custom-chip" ng-show="file" ng-repeat="file in currentAuthor.Files" style="display:inline-block;">
-											<button class="custom-chip-delete-button" ng-click="file = null">
-												<i class="tiny material-icons">close</i>
-											</button>
-											{{file.name}}
+									<div ng-show="currentAuthor" class="col s6" style="padding-left:0px;padding-right:0px;">
+										<div style="cursor:pointer;text-transform: inherit; display: block; width: 100%;border-radius:0px;border-top-right-radius:1px;" type="file" ng-change="setFile()" ngf-select multiple ngf-multiple="true" ng-model="currentAuthor.UploadFile" class="center btn waves-effect waves-light purple">Add To {{currentAuthor.Name}}'s Documents</div>
+										<div style="padding-top:0.5em;padding-left:0.5em;padding-right:0.5em;height:100%;overflow-y: scroll;padding-bottom:3em;">
+											<div class="custom-chip" ng-show="file" ng-repeat="file in currentAuthor.Files" style="display:inline-block;">
+												<button class="custom-chip-delete-button" ng-click="removeOtherAuthorsDoc(file)">
+													<i class="tiny material-icons">close</i>
+												</button>
+												{{file.name}}
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<br>
 						<div class="row">
 							<div class="col s12">
 								<button ng-click="startUpload()" id="text-your-own-document-next-page" class="btn waves-effect waves-light purple">Start</button>
@@ -189,7 +178,6 @@
 				<div class="row" style="">
 					<h4 style="color:#9B4DCA" class="header center">{{ verdict }} {{ results.experimentContents[0].title }}</h4>
 					<div class="container">
-						<!-- <p class="center">Worden believes <strong id="suspectedAuthor" style="text-decoration:underline;">{{suspected}}</strong> the true author of <strong class="documentName">{{results.experimentContents[0].title}}</strong> among the <strong id="numberOfAuthors"></strong> other authors. </p> -->
 						<p class="{{ responseAlignment }}">{{ response }}</p>
 						<p class="{{ responseAlignment }}">{{ responseInstructions }} improve your chances of anonymity, try <span style="text-decoration:underline;">removing features</span> with <span class="feature-thing feature-red">-</span> from your document to anonymize and <span style="text-decoration:underline;">adding features</span> with <span class="feature-thing feature-green">+</span> to better emulate other writers' styles.</p>
 					</div>
