@@ -344,6 +344,7 @@ public class IndexController {
 		}
 		
 		JsonObject json = fullApi.getResults().toJson();
+		System.out.println(json);
 		json.addProperty("InfoGain", fullApi.getReadableInfoGain(false));
 		json.add("FeatureOtherDocsAverageCounts", jsonOtherDocsAverageCounts);
 		json.add("FeatureOtherAuthorsAverageCounts", jsonOtherAuthorsAverageCounts);
