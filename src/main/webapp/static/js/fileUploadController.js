@@ -344,7 +344,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 			}
 		});
 		
-		if (currentSuspect !== "userAuthor" && currentSuspect !== "testAuthor") {
+		if (currentSuspect !== "testAuthor" && currentSuspect !== "_Unknown_") {
 			$scope.verdict = "Worden did not identify you as the author of"
 			$scope.response = "Your writing style features below are similar enough to the other writers that Worden incorrectly guessed the author of " + $scope.results.experimentContents[0].title;
 			$scope.responseInstructions = "To further";

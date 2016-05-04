@@ -9,6 +9,8 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 	$scope.addNewAuthor = false;
 	$scope.currentAuthorIndex;
 	
+	$scope.suspectedAuthor = "FOOBAR";
+	
 	$scope.uploadAuthors = false;
 	$scope.uploadGenericSet = false;
 
@@ -103,7 +105,6 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 		
 		var infoGainFeatures = $scope.results.InfoGain;
 		var featureTestDocCounts = $scope.results.FeatureTestDocCounts;
-		var featureOtherDocsAverageCounts = $scope.results.FeatureOtherDocsAverageCounts;
 		var featureOtherAuthorsAverageCounts = $scope.results.FeatureOtherAuthorsAverageCounts;
 		var featureLine = infoGainFeatures.split('\n');
 
@@ -145,7 +146,6 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 			var featureStyles = featureTokens[1];
 
 			var featureTestDocCount = featureTestDocCounts[feature];
-			var featureOtherDocsAverageCount = featureOtherDocsAverageCounts[feature];
 			var featureOtherAuthorsAverageCount = featureOtherAuthorsAverageCounts[feature];
 
 			if (featureName == "Special-Characters") {
@@ -158,13 +158,13 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 				if (feature === '=') {
 					featureToDisplay = "Equals signs (=)";
 				}
-				addPremadeFeatureToCard(featureToDisplay, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, "unique-character");
+				addPremadeFeatureToCard(featureToDisplay, featureTestDocCount, featureOtherAuthorsAverageCount, "unique-character");
 			} else if (featureName == "Misspelled-Words") {
 				misspelledWordsCount++;
 				if (misspelledWordsCount > 12) {
 					continue;
 				}
-				addToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, 'misspelled-words');
+				addToCard(featureStyles, featureTestDocCount, featureOtherAuthorsAverageCount, 'misspelled-words');
 			} else if (featureName == "Punctuation") {
 				punctuationCount++;
 				if (punctuationCount > 12) {
@@ -189,26 +189,26 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 				} else if (feature === '!') {
 					featureToDisplay = "Exclamation marks (!)";
 				}
-				addPremadeFeatureToCard(featureToDisplay, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, "punctuation");
+				addPremadeFeatureToCard(featureToDisplay, featureTestDocCount, featureOtherAuthorsAverageCount, "punctuation");
 			} else if (featureName == "Word-Lengths") {
 				wordLengthsCount++;
 				if (wordLengthsCount > 12) {
 					continue;
 				}
 				featureStyles = featureStyles.substring(0, featureStyles.length - 1) + " letters long";
-				addPremadeFeatureToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, "word-lengths");
+				addPremadeFeatureToCard(featureStyles, featureTestDocCount, featureOtherAuthorsAverageCount, "word-lengths");
 			} else if (featureName == "Letters" || featureName == "Top-Letter-bigrams" || featureName == "Top-Letter-trigrams") {
 				lettersAndLetterCombinationsCount++;
 				if (lettersAndLetterCombinationsCount > 12) {
 					continue;
 				}
-				addToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, 'letters-and-letter-combinations');
+				addToCard(featureStyles, featureTestDocCount, featureOtherAuthorsAverageCount, 'letters-and-letter-combinations');
 			} else if (featureName == "Function-Words") {
 				functionWordsCount++;
 				if (functionWordsCount > 12) {
 					continue;
 				}
-				addToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, 'function-words');
+				addToCard(featureStyles, featureTestDocCount, featureOtherAuthorsAverageCount, 'function-words');
 			} else if (featureName == "Words" || featureName == "Word-Bigrams" || featureName == "Word-Trigrams") {
 				wordsAndWordCombinationsCount++;
 				if (wordsAndWordCombinationsCount > 12) {
@@ -227,7 +227,7 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 						processedWords = processedWords + wordTokens[w] + " ";
 					}
 				}
-				addPremadeFeatureToCard(processedWords, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, 'words-and-word-combinations');
+				addPremadeFeatureToCard(processedWords, featureTestDocCount, featureOtherAuthorsAverageCount, 'words-and-word-combinations');
 			}
 		}
 		
@@ -251,31 +251,38 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 		return (percentageAuthor2[0] - percentageAuthor1[0]);
 	}
 
-	function addToCard(featureStyles, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id) {
+	function addToCard(featureStyles, featureTestDocCount, featureOtherAuthorsAverageCount, id) {
 		var feature = featureStyles.substring(0, featureStyles.length - 1);
 		if (document.getElementById(id+"-card") == null) {
 			console.log("Card with id '" + id + "'' not found in DOM");
 		} else {
-			addListItem(feature, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id);
+			addListItem(feature, featureTestDocCount, featureOtherAuthorsAverageCount, id);
 		}
 	}
 	
-	function addPremadeFeatureToCard(feature, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id) {
+	function addPremadeFeatureToCard(feature, featureTestDocCount, featureOtherAuthorsAverageCount, id) {
 		if (document.getElementById(id+"-card") == null) {
 			console.log("Card with id '" + id + "'' not found in DOM");
 		} else {
-			addListItem(feature, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id);
+			addListItem(feature, featureTestDocCount, featureOtherAuthorsAverageCount, id);
 		}
 	}
 	
-	function addListItem(feature, featureTestDocCount, featureOtherDocsAverageCount, featureOtherAuthorsAverageCount, id) {
+	function addListItem(feature, featureTestDocCount, featureOtherAuthorsAverageCount, id) {
 		var featureString = feature.trim();
-		if (featureOtherAuthorsAverageCount > featureTestDocCount) {
-			featureString = "<div class=\"feature-thing feature-green\">+</div> " + featureString;
+		var ratio = 0.0;
+		if (featureTestDocCount > featureOtherAuthorsAverageCount) {
+			ratio = featureOtherAuthorsAverageCount / featureTestDocCount;
 		} else {
-			featureString = "<div class=\"feature-thing feature-red\">-</div> " + featureString;
+			ratio = featureTestDocCount / featureOtherAuthorsAverageCount;
 		}
-		$("#"+id+"-list").append('<li data-hint=\"Your test document: '+featureTestDocCount+' occurrences&#xa;Your average: '+featureOtherDocsAverageCount+' occurrences&#xa;Random peer\'s average: '+featureOtherAuthorsAverageCount+' occurrences\" class=\"hint--top hint--bounce hint--rounded\">' + featureString + '</li>');
+		
+		if (ratio > 0.75) {
+			featureString = "<div class=\"feature-thing feature-green\">=</div> " + featureString;
+		} else {
+			featureString = "<div class=\"feature-thing feature-yellow\">~</div> " + featureString;
+		}
+		$("#"+id+"-list").append('<li data-hint=\"Anonymous document: '+featureTestDocCount+' occurrences&#xa;Suspect\'s average: '+featureOtherAuthorsAverageCount+' occurrences\" class=\"hint--top hint--bounce hint--rounded\">' + featureString + '</li>');
 	}
 
 	function createEmptyCard(id, title, description) {
@@ -335,17 +342,8 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 			}
 		});
 		
-		if (currentSuspect !== "userAuthor" && currentSuspect !== "testAuthor") {
-			$scope.verdict = "Worden did not identify you as the author of"
-			$scope.response = "Your writing style features below are similar enough to the other writers that Worden incorrectly guessed the author of " + $scope.results.experimentContents[0].title;
-			$scope.responseInstructions = "To further";
-			$scope.responseAlignment = "left";
-		} else {
-			$scope.verdict = "You've been identified as the author of"
-			$scope.response = "Your writing style features below are unique enough when compared to the other provided works that Worden can correctly guess you as the true author of " + $scope.results.experimentContents[0].title;
-			$scope.responseInstructions = "To";
-			$scope.responseAlignment = "left";
-		}
+		$scope.verdict = "Worden believes the true author is";
+		$scope.response = "The writing style features below most closely matches " + $scope.results.experimentContents[0].title + " up with " + $scope.suspectedAuthor + "'s other provided works in comparison to the other provided writers.";
 	};
 	
 	$scope.startUpload = function() {

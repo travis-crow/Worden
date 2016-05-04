@@ -42,7 +42,7 @@ import edu.drexel.psal.jstylo.machineLearning.weka.WekaAnalyzer;
 @RequestMapping("/")
 public class IndexController {
 
-	private static String userAuthor = "testAuthor";
+	private static String userAuthor = "_Unknown_";
 	private static String testDocument = "";
 
 	@RequestMapping("/")
@@ -141,7 +141,7 @@ public class IndexController {
 		FullAPI fullApi =  new Builder().cfdPath(xml)
 										.ps(ps)
 										.setAnalyzer(new WekaAnalyzer())
-										.numThreads(1)
+										.numThreads(4)
 										.analysisType(analysisType.TRAIN_TEST_KNOWN)
 										.build();
 		fullApi.prepareInstances();
@@ -221,6 +221,8 @@ public class IndexController {
 			//System.out.printf("%s:%s\n", feature, average);
 		}
 		
+		System.out.println(fullApi);
+		System.out.println(fullApi.getResults());
 		JsonObject json = fullApi.getResults().toJson();
 		json.addProperty("InfoGain", fullApi.getReadableInfoGain(false));
 		json.add("FeatureTestDocCounts", jsonTestDocCounts);
@@ -260,7 +262,6 @@ public class IndexController {
 		while (itr.hasNext()) {
 			String uploadedFile = itr.next();
 			MultipartFile file = request.getFile(uploadedFile);
-			
 			if (uploadedFile.contains("author")) {
 				System.out.println("Adding train document: " + file.getOriginalFilename());
 				int closeBracket = uploadedFile.indexOf(']'); // example authors[0].files[0] // just includes authors[0]
@@ -279,44 +280,50 @@ public class IndexController {
 		FullAPI fullApi =  new Builder().cfdPath(xml)
 										.ps(ps)
 										.setAnalyzer(new WekaAnalyzer())
-										.numThreads(1)
+										.numThreads(4)
 										.analysisType(analysisType.TRAIN_TEST_UNKNOWN)
 										.build();
 		fullApi.prepareInstances();
 		fullApi.calcInfoGain();
 		fullApi.run();
 
-		// Counting features in the author's test document
-		ConcurrentHashMap<String, DocumentData> featureDataMap = null;
-		JsonObject jsonOtherDocsAverageCounts = new JsonObject();
+		
+		JsonObject json = fullApi.getResults().toJson();
+		JsonArray probabilityMap = json.getAsJsonArray("experimentContents").get(0).getAsJsonObject().getAsJsonArray("probabilityMap");
+		int numberOfAuthors = probabilityMap.size();
+		double maxProbability = 0;
+		String suspectedAuthor = "";
+		for (int i = 0; i < numberOfAuthors; i++) {
+			String author = probabilityMap.get(i).getAsJsonObject().get("Author").getAsString();
+			double probability = probabilityMap.get(i).getAsJsonObject().get("Probability").getAsDouble();
+			if (probability > maxProbability) {
+				suspectedAuthor = author;
+				maxProbability = probability;
+			}
+		}
+		
+		JsonObject jsonTestDocCounts = new JsonObject();
+		DataMap testingDataMap = fullApi.getTestingDataMap(); // Contains the test document(s) only
+		ConcurrentHashMap<String, DocumentData> featureDataMap = testingDataMap.getDataMap().get(userAuthor);
+		for (Entry <Integer, String> featureEntry: testingDataMap.getFeatures().entrySet()) {
+			String feature = featureEntry.getValue();
+			Integer featureCount = 0;
+			for (Entry <String, DocumentData> testDocumentEntry: featureDataMap.entrySet()) {
+				FeatureData featureData = testDocumentEntry.getValue().getDataValues().get(featureEntry.getKey());
+				if (featureData != null) {
+					featureCount = featureData.getCount();
+				}
+			}
+			jsonTestDocCounts.addProperty(feature, featureCount);
+		}
+		
 		JsonObject jsonOtherAuthorsAverageCounts = new JsonObject();
 		DataMap otherDocsDataMap = fullApi.getTrainingDataMap(); // ALL other docs (include user's other docs)
 		HashMap<String, Double> randomAuthorsAverageCounts = new HashMap<String, Double>();
 		Random randomAuthorsFeatures = new Random();
 		for (Entry<String, ConcurrentHashMap<String, DocumentData>> authorEntry : otherDocsDataMap.getDataMap().entrySet()) {
 			String authorName = authorEntry.getKey();
-			// Averaging feature counts in the user's "Other Documents"
-			if (authorName.equals(userAuthor)) {
-				featureDataMap = authorEntry.getValue();
-				for (Entry <Integer, String> featureEntry: otherDocsDataMap.getFeatures().entrySet()) {
-					String feature = featureEntry.getValue();
-					double featureCount = 0.0;
-					double numOfOtherDocs = 0.0;
-					for (Entry <String, DocumentData> otherDocumentsEntry: featureDataMap.entrySet()) {
-						numOfOtherDocs++;
-						FeatureData featureData = otherDocumentsEntry.getValue().getDataValues().get(featureEntry.getKey());
-						if (featureData != null) {
-							featureCount += featureData.getCount();
-						}
-					}
-					double featureAverage = featureCount / numOfOtherDocs;
-					featureAverage = Math.round(featureAverage * 100.0) / 100.0;
-					jsonOtherDocsAverageCounts.addProperty(feature, featureAverage);
-				}
-			// Averaging feature counts for random other author's documents
-			// (OR, one that has feature counts if all other authors have 0 counts, this
-			// should be safe enough to keep us away from becoming a plagerism tool)
-			} else {
+			if (authorName.equals(suspectedAuthor)) {
 				featureDataMap = authorEntry.getValue();
 				for (Entry <Integer, String> featureEntry: otherDocsDataMap.getFeatures().entrySet()) {
 					String feature = featureEntry.getValue();
@@ -342,11 +349,10 @@ public class IndexController {
 			double average = Math.round(featureAverage.getValue() * 100.0) / 100.0;
 			jsonOtherAuthorsAverageCounts.addProperty(feature, average);
 		}
-		
-		JsonObject json = fullApi.getResults().toJson();
-		System.out.println(json);
+
+		json = fullApi.getResults().toJson();		
 		json.addProperty("InfoGain", fullApi.getReadableInfoGain(false));
-		json.add("FeatureOtherDocsAverageCounts", jsonOtherDocsAverageCounts);
+		json.add("FeatureTestDocCounts", jsonTestDocCounts);
 		json.add("FeatureOtherAuthorsAverageCounts", jsonOtherAuthorsAverageCounts);
 		return json.toString();
 	}

@@ -431,11 +431,15 @@ html, label {
 }
 .feature-green {
 	background-color: #84C34B;
-	padding-left: 0.35em;
+	padding-left: 0.4em;
 }
 .feature-red {
 	background-color: #C70631;
 	padding-left: 0.5em;
+}
+.feature-yellow {
+	background-color: #C7A822; 
+	padding-left: 0.30em;
 }
 .feature-thing {
 	display:inline-block;

@@ -7,7 +7,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
 		<title>Worden - Identify Anonymous Document</title>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link href="<c:url value='/static/css/materialize.css' />" rel="stylesheet" " rel="stylesheet " />
+		<link href="<c:url value='/static/css/materialize.css' />" rel="stylesheet" />
+		<link href="<c:url value='/static/css/bigfoot-default.css' />" rel="stylesheet" />
+		<link href="<c:url value='/static/css/hint.css' />" rel="stylesheet" />
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js "></script>
 		<script src="<c:url value='/static/js/ng-file-upload.js' />" ></script>
 		<script src="<c:url value='/static/js/identifyUploadController.js' />"></script>
@@ -111,9 +113,8 @@
 					<h3 class="header center">Results</h3>
 				</div>
 				<div class="row">
-					<h4 style="color:#9B4DCA" class="header center">{{ verdict }} {{results.experimentContents[0].title}}</h4>
+					<h4 style="color:#9B4DCA" class="header center">{{ verdict }} {{suspectedAuthor}}</h4>
 					<div class="container">
-						<!-- <p class="center">Worden believes <strong id="suspectedAuthor" style="text-decoration:underline;">{{suspected}}</strong> the true author of <strong class="documentName">{{results.experimentContents[0].title}}</strong> among the <strong id="numberOfAuthors"></strong> other authors. </p> -->
 						<p>{{ response }}</p>
 					</div>
 					<div class="row" id="suggestions">
@@ -145,6 +146,10 @@
 				</div>
 			</div>
 		</main>
+		<div class="footnotes">
+			<ol id="footnotes-list">
+			</ol>
+		</div>
 		<footer class="page-footer white">
 			<div class="container">
 				<div class="row">
@@ -156,6 +161,7 @@
 		</footer>
 		<!-- Scripts -->
 		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="<c:url value='/static/js/bigfoot.js' />"></script>
 		<script src="<c:url value='/static/js/materialize.js' />"></script>
 	</body>
 
