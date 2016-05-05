@@ -99,8 +99,10 @@ public class IndexController {
 			if (uploadedFile.contains("author")) {
 				System.out.println("Adding train document: " + file.getOriginalFilename());
 				int closeBracket = uploadedFile.indexOf(']'); // example authors[0].files[0] // just includes authors[0]
-				String authorString = uploadedFile.substring(0,closeBracket + 1);
-				ps.addTrainDoc(authorString, makeDoc(file, userAuthor, refDir));
+				String authorString = uploadedFile.substring(closeBracket + 1,uploadedFile.length());
+				closeBracket = authorString.indexOf(']');
+				String subAuthorString = authorString.substring(1,closeBracket);
+				ps.addTrainDoc(subAuthorString, makeDoc(file, userAuthor, refDir));
 			} else if(uploadedFile.contains("test")) {
 				System.out.println("Adding test document: " + file.getOriginalFilename());
 				ps.addTestDoc(userAuthor, makeDoc(file, userAuthor, testDir));
