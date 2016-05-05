@@ -348,12 +348,22 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 	
 	$scope.startUpload = function() {
 		$scope.loading = true;
+		 $scope.authorUpload = [];
+		 angular.forEach($scope.authors,function(value,key){
+			 var name = value.Name;
+			 
+			 var uploadObj = new Object;
+			 var name = value.Name;
+			 uploadObj[name] = value.Files;
+			 
+			 $scope.authorUpload.push(uploadObj);
+		 });
 		Upload.upload({
 			url: '/Worden/StartIdentifyProcess',
 			data: {
 				test: $scope.testFile,
 				type: $scope.type,
-				authors: $scope.authors
+				authors: $scope.authorUpload
 			}
 		}).then(function (response) {
 			$timeout(function () {
