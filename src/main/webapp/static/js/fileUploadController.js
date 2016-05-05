@@ -361,13 +361,23 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 	$scope.startUpload = function() {
 		$scope.loading = true;
 		 if ($scope.files && $scope.files.length) {
+			 $scope.authorUpload = [];
+			 angular.forEach($scope.authors,function(value,key){
+				 var name = value.Name;
+				 
+				 var uploadObj = new Object;
+				 var name = value.Name;
+				 uploadObj[name] = value.Files;
+				 
+				 $scope.authorUpload.push(uploadObj);
+			 });
 			 Upload.upload({
 				 url: '/Worden/StartProcess',
 				 data: {
 					 files: $scope.files,
 					 test: $scope.testFile,
 					 type: $scope.type,
-					 authors: $scope.authors
+					 authors: $scope.authorUpload
 				 }
 			 }).then(function (response) {
 				 $timeout(function () {
