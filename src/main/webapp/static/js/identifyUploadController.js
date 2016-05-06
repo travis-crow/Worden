@@ -8,8 +8,8 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 	$scope.loading = false;
 	$scope.addNewAuthor = false;
 	$scope.currentAuthorIndex;
-	
-	$scope.suspectedAuthor = "FOOBAR";
+
+	$scope.testDocument = "";
 	
 	$scope.uploadAuthors = false;
 	$scope.uploadGenericSet = false;
@@ -102,6 +102,8 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 		$scope.authors.splice(index, 1);
 	}
 	$scope.processResults = function (data) {
+		$scope.testDocument = $scope.results.experimentContents[0].title;
+		$scope.suspectedAuthor = $scope.results.suspectedAuthor;
 		
 		var infoGainFeatures = $scope.results.InfoGain;
 		var featureTestDocCounts = $scope.results.FeatureTestDocCounts;
@@ -160,6 +162,7 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 				}
 				addPremadeFeatureToCard(featureToDisplay, featureTestDocCount, featureOtherAuthorsAverageCount, "unique-character");
 			} else if (featureName == "Misspelled-Words") {
+				console.log("WHY DON'T I SEE MISSPELLED WORDS");
 				misspelledWordsCount++;
 				if (misspelledWordsCount > 12) {
 					continue;
@@ -276,11 +279,11 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 		} else {
 			ratio = featureTestDocCount / featureOtherAuthorsAverageCount;
 		}
-		
-		if (ratio > 0.75) {
+		console.log(feature + " - " + ratio);
+		if (ratio > 0.6) {
 			featureString = "<div class=\"feature-thing feature-green\">=</div> " + featureString;
 		} else {
-			featureString = "<div class=\"feature-thing feature-yellow\">~</div> " + featureString;
+			featureString = "<div class=\"feature-thing feature-red-squiggly\">~</div> " + featureString;
 		}
 		$("#"+id+"-list").append('<li data-hint=\"Anonymous document: '+featureTestDocCount+' occurrences&#xa;Suspect\'s average: '+featureOtherAuthorsAverageCount+' occurrences\" class=\"hint--top hint--bounce hint--rounded\">' + featureString + '</li>');
 	}
@@ -343,7 +346,7 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 		});
 		
 		$scope.verdict = "Worden believes the true author is";
-		$scope.response = "The writing style features below most closely matches " + $scope.results.experimentContents[0].title + " up with " + $scope.suspectedAuthor + "'s other provided works in comparison to the other provided writers.";
+		$scope.response = "In comparison to the other provided writers, " + $scope.testDocument + "'s writing style features most closely matches " + $scope.results.suspectedAuthor + "'s other provided works.";
 	};
 	
 	$scope.startUpload = function() {

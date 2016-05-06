@@ -107,8 +107,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 		}
 		$scope.authors.splice(index, 1);
 	}
-	$scope.processResults = function (data) {
-		
+	$scope.processResults = function (data) {		
 		var infoGainFeatures = $scope.results.InfoGain;
 		var featureTestDocCounts = $scope.results.FeatureTestDocCounts;
 		var featureOtherDocsAverageCounts = $scope.results.FeatureOtherDocsAverageCounts;
