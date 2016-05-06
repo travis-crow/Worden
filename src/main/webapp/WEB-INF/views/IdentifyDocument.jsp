@@ -67,7 +67,7 @@
 						<br>
 						<div class="row">
 							<p>Add documents from at least three authors your documents will be compared against.</p>
-							<div class="col  s12">
+							<div class="col s12" style="padding-right:0;padding-left:0;">
 								<div class="col s12" style="padding:0;overflow:hidden;height:200px;background-color:white;border: solid 1px #D1D1D1;border-radius:2px;">
 									<div class="col s6" style="height:100%;border-right: 1px solid #D1D1D1;padding-left:0px;padding-right:0px;">
 										<a href="" ng-click="addAuthor()" id="create-author" class="center btn waves-effect waves-light purple" style="text-transform: inherit; display: block; width: 100%;border-radius:0px;border-top-left-radius:1px;">Create Author</a>

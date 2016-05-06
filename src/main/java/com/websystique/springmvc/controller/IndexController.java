@@ -2,12 +2,9 @@ package com.websystique.springmvc.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,7 +25,6 @@ import com.google.gson.JsonObject;
 import com.jgaap.generics.Document;
 
 import edu.drexel.psal.jstylo.generics.DataMap;
-import edu.drexel.psal.jstylo.generics.DocResult;
 import edu.drexel.psal.jstylo.generics.DocumentData;
 import edu.drexel.psal.jstylo.generics.FeatureData;
 import edu.drexel.psal.jstylo.generics.FullAPI;
@@ -324,7 +320,6 @@ public class IndexController {
 		JsonObject jsonOtherAuthorsAverageCounts = new JsonObject();
 		DataMap otherDocsDataMap = fullApi.getTrainingDataMap(); // ALL other docs (include user's other docs)
 		HashMap<String, Double> randomAuthorsAverageCounts = new HashMap<String, Double>();
-		Random randomAuthorsFeatures = new Random();
 		for (Entry<String, ConcurrentHashMap<String, DocumentData>> authorEntry : otherDocsDataMap.getDataMap().entrySet()) {
 			String authorName = authorEntry.getKey();
 			if (authorName.equals(suspectedAuthor)) {
@@ -341,10 +336,7 @@ public class IndexController {
 						}
 					}
 					double featureAverage = featureCount / numOfOtherDocs;
-					Double average = randomAuthorsAverageCounts.get(feature);
-					if (average == null || average.equals(0.0) || (featureAverage > 0.0 && randomAuthorsFeatures.nextBoolean())) {
-						randomAuthorsAverageCounts.put(feature, featureAverage);
-					}
+					randomAuthorsAverageCounts.put(feature, featureAverage);
 				}
 			}
 		}
@@ -356,6 +348,7 @@ public class IndexController {
 
 		json = fullApi.getResults().toJson();		
 		json.addProperty("InfoGain", fullApi.getReadableInfoGain(false));
+		json.addProperty("suspectedAuthor", suspectedAuthor);
 		json.add("FeatureTestDocCounts", jsonTestDocCounts);
 		json.add("FeatureOtherAuthorsAverageCounts", jsonOtherAuthorsAverageCounts);
 		return json.toString();

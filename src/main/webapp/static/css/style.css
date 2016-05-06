@@ -434,11 +434,11 @@ html, label {
 	padding-left: 0.4em;
 }
 .feature-red {
-	background-color: #C70631;
+	background-color: #C2605D;
 	padding-left: 0.5em;
 }
-.feature-yellow {
-	background-color: #C7A822; 
+.feature-red-squiggly {
+	background-color: #C2605D; 
 	padding-left: 0.30em;
 }
 .feature-thing {
