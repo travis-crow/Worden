@@ -13,6 +13,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js "></script>
 		<script src="<c:url value='/static/js/ng-file-upload.js' />" ></script>
 		<script src="<c:url value='/static/js/identifyUploadController.js' />"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.1/Chart.min.js"></script>
 		<link href="<c:url value='/static/css/style.css' />" rel="stylesheet" rel="stylesheet" />
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	</head>
@@ -120,32 +121,11 @@
 					<div class="row" id="suggestions">
 					</div>
 				</div>
-				<!-- Modal Structure -->
-				<div id="modal1" class="modal">
-					<div class="modal-content">
-						<div class="container" style="overflow-y: scroll;overflow-x: hidden;max-height:350px;">
-							<div class="row">
-								<div class="col s12 l10 offset-l1">
-									<table class="centered highlight bordered">
-										<thead>
-											<tr>
-												<th data-field="id">Author</th>
-												<th data-field="name">Wrote <span class="documentName"></span></th>
-											</tr>
-										</thead>
-										<tbody id="certaintyTable">
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<a href="#!" class="modal-action modal-close waves-effect waves-light purple btn" style="margin-right:5px;">Close</a>
-					</div>
-				</div>
 			</div>
 		</main>
+		<div class="center">
+			<canvas width="1200" height="300" id="suspectConfidenceChart"></canvas>
+		</div> 
 		<div class="footnotes">
 			<ol id="footnotes-list">
 			</ol>
