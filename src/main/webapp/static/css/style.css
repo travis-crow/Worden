@@ -155,22 +155,48 @@ custom-chip:last-child {
 	min-height: 280px;
 }
 
-.card-wrapper ul {
+.two-columns ul {
 	width: 22em;/* 30em; */
 }
-.card-wrapper ul li {
+.two-columns ul li {
 	float: left;
 	width: 9.5em;/* 10em; */
 	list-style-type: circle;
+}
+.card-wrapper ul li {
 	margin-left: 1em;
-	margin-bottom: 5px;
+	margin-bottom: 6px;
+	display: block;
+}
+div.two-column-feature {
+	margin-top: 0.5em;
+}
+a.two-column-feature, span.two-column-feature {
+	margin-top: -2em;
+	margin-left: 1.9em;
+	display: block;
 }
 /* .card-wrapper ul li:before { content: '\2022 '; margin-left: -1em; margin-right: .65em;} */
 .card-wrapper br {
 	clear: left;
 }
-#suggestions {
+.extra-feature-text {
+	font-style: italic;
+	padding-left: 2.5em;
+	font-size: 0.75em;
+}
+#suggestions, #suspect-chart {
 	width: 96%;
+}
+canvas{
+	width: 95% !important;
+	max-width: 1230px !important;
+	height: auto !important;
+}
+
+iframe.chartjs-hidden-iframe {
+	width: 1200px;
+	height: 300px;
 }
 
 .underline {
@@ -447,4 +473,14 @@ html, label {
 	color: white;
 	width: 1.3em;
 	margin-right: 0.3em;
+}
+
+.text-link {
+	color: #262C30;
+	text-decoration: underline;
+	-webkit-transition: color .2s linear;
+    transition: color .2s linear;
+}
+.text-link:hover {
+	color: #9B4DCA;
 }

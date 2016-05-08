@@ -129,6 +129,9 @@ public class IndexController {
 			while (files.hasNext()) {
 				File currentFile = files.next();
 				String currentAuthor = currentFile.getParentFile().getName();
+				if (currentAuthor.equals("emails") || currentAuthor.equals("essays") || currentAuthor.equals("tweets")) {
+					continue;
+				}
 				System.out.println("Adding train document: " + currentFile.getName());
 				ps.addTrainDoc(currentAuthor, makeDoc(currentFile, currentAuthor));
 			}
