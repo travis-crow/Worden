@@ -22,10 +22,10 @@
 		<header>
 			<nav class="white" role="navigation">
 				<div class="nav-wrapper" style="margin-left: 1em;">
-					<a href="../Worden/Welcome" class="brand-logo right"><img id="worden-logo" src="<c:url value='/static/images/worden-banner-logo.png' />"></a>
+					<a href="../Welcome" class="brand-logo right"><img id="worden-logo" src="<c:url value='/static/images/worden-banner-logo.png' />"></a>
 					<div class="col s12 hide-on-med-and-down">
-						<a href="../Worden/Welcome" class="breadcrumb">Home</a>
-						<a href="../Worden/IdentifyDocument" class="breadcrumb">Identify Anonymous Document</a>
+						<a href="../Welcome" class="breadcrumb">Home</a>
+						<a href="../IdentifyDocument" class="breadcrumb">Identify Anonymous Document</a>
 						<span ng-show="results" ng-hide="results === false" class="breadcrumb">Results</span>
 					</div>
 				</div>
