@@ -74,17 +74,30 @@ public class IndexController {
 		
 		File testFile = new File(testDir);
 		if (!testFile.exists()) {
-			testFile.mkdir();
+			try{
+				testFile.mkdir();				
+			}
+			catch(Exception e){
+				return e.getMessage();
+			}
+
 		}
 
 		File refFile = new File(refDir);
 		if (!refFile.exists()) {
-			refFile.mkdir();
+			try{
+				refFile.mkdir();
+			}
+			catch(Exception e){
+				return e.getMessage();
+			}
+
 		}
 
 	
 		String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
-		System.out.println("Temporary File Directory: " + refDir);
+
+		try{
 
 		//TODO is the document to identify always at a specific index? 
 		//Surely there's a better way to determine which is which than whether or not we're at the end of the iterator
@@ -92,20 +105,29 @@ public class IndexController {
 			String uploadedFile = itr.next();
 			MultipartFile file = request.getFile(uploadedFile);
 			
-			if (uploadedFile.contains("author")) {
-				System.out.println("Adding train document: " + file.getOriginalFilename());
+			if (uploadedFile.contains("author")) {//adding train document
 				int closeBracket = uploadedFile.indexOf(']'); // example authors[0].files[0] // just includes authors[0]
 				String authorString = uploadedFile.substring(closeBracket + 1,uploadedFile.length());
 				closeBracket = authorString.indexOf(']');
 				String subAuthorString = authorString.substring(1,closeBracket);
 				ps.addTrainDoc(subAuthorString, makeDoc(file, userAuthor, refDir));
-			} else if(uploadedFile.contains("test")) {
-				System.out.println("Adding test document: " + file.getOriginalFilename());
-				ps.addTestDoc(userAuthor, makeDoc(file, userAuthor, testDir));
+			} else if(uploadedFile.contains("test")) {// adding test document
+				try{
+					ps.addTestDoc(userAuthor, makeDoc(file, userAuthor, testDir));
+				}
+				catch(Exception e){
+					return e.getMessage();
+				}
 				testDocument = file.getOriginalFilename();
 			} else {
-				System.out.println("Adding train document: " + file.getOriginalFilename());
-				ps.addTrainDoc(userAuthor, makeDoc(file, userAuthor, refDir));
+				
+				try{
+					ps.addTrainDoc(userAuthor, makeDoc(file, userAuthor, refDir));
+				}
+				catch(Exception e){
+					return e.getMessage();
+				}
+
 			}
 		}
 
@@ -133,12 +155,16 @@ public class IndexController {
 					continue;
 				}
 				System.out.println("Adding train document: " + currentFile.getName());
-				ps.addTrainDoc(currentAuthor, makeDoc(currentFile, currentAuthor));
+				try{
+					ps.addTrainDoc(currentAuthor, makeDoc(currentFile, currentAuthor));
+				}
+				catch(Exception e){
+					return e.toString();
+				}
 			}
 		}
 
-		//switch on essay/email/tweet dbs
-		System.out.println("Problem Set XML\n" + ps.toXMLString());
+
 		FullAPI fullApi =  new Builder().cfdPath(xml)
 										.ps(ps)
 										.setAnalyzer(new WekaAnalyzer())
@@ -230,6 +256,12 @@ public class IndexController {
 		json.add("FeatureOtherDocsAverageCounts", jsonOtherDocsAverageCounts);
 		json.add("FeatureOtherAuthorsAverageCounts", jsonOtherAuthorsAverageCounts);
 		return json.toString();
+		}
+		catch(Exception e){
+			return e.getMessage();
+		}
+		
+		
 	}
 	
 	@ResponseStatus(value = HttpStatus.OK)
