@@ -1,6 +1,9 @@
 package com.websystique.springmvc.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -99,8 +102,6 @@ public class IndexController {
 
 		try{
 
-		//TODO is the document to identify always at a specific index? 
-		//Surely there's a better way to determine which is which than whether or not we're at the end of the iterator
 		while (itr.hasNext()) {
 			String uploadedFile = itr.next();
 			MultipartFile file = request.getFile(uploadedFile);
@@ -131,7 +132,6 @@ public class IndexController {
 			}
 		}
 
-		//TODO load in the sample files
 		//sample files are currently located in References/samples
 		if (type != null) {
 			String samplePath;
@@ -164,12 +164,13 @@ public class IndexController {
 			}
 		}
 
-
 		FullAPI fullApi =  new Builder().cfdPath(xml)
 										.ps(ps)
 										.setAnalyzer(new WekaAnalyzer())
 										.numThreads(4)
 										.analysisType(analysisType.TRAIN_TEST_KNOWN)
+										.chunkSize(getMaxWordCount(ps))
+										.chunkDocs(true)
 										.build();
 		fullApi.prepareInstances();
 		fullApi.calcInfoGain();
@@ -262,6 +263,28 @@ public class IndexController {
 		}
 		
 		
+	}
+	
+	private int getMaxWordCount(ProblemSet ps){
+	    int max = 0;
+	    for (Document doc : ps.getAllTestDocs()){ //doc hasn't yet been processed, gotta do this the ugly way
+	        File f = new File(doc.getFilePath());
+	        int current = 0;
+	        try {
+                BufferedReader br = new BufferedReader(new FileReader(f));
+                String ds = "";
+                while (br.ready())
+                    ds +=br.readLine()+"\n";
+                current = ds.split(" ").length;
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                current = 500;
+            }
+	        if (current > max)
+	            max = current;
+	    }
+	    return max;
 	}
 	
 	@ResponseStatus(value = HttpStatus.OK)
