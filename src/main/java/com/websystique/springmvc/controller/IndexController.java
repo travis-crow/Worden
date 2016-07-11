@@ -77,28 +77,17 @@ public class IndexController {
 		
 		File testFile = new File(testDir);
 		if (!testFile.exists()) {
-			try{
-				testFile.mkdir();				
-			}
-			catch(Exception e){
-				return e.getMessage();
-			}
-
+			testFile.mkdir();
 		}
 
 		File refFile = new File(refDir);
 		if (!refFile.exists()) {
-			try{
-				refFile.mkdir();
-			}
-			catch(Exception e){
-				return e.getMessage();
-			}
-
+			refFile.mkdir();
 		}
 
 	
 		String xml = request.getServletContext().getRealPath("/writeprints_feature_set_limited.xml");
+		System.out.println("Temporary File Directory: " + refDir);
 
 		try{
 
@@ -106,29 +95,20 @@ public class IndexController {
 			String uploadedFile = itr.next();
 			MultipartFile file = request.getFile(uploadedFile);
 			
-			if (uploadedFile.contains("author")) {//adding train document
+			if (uploadedFile.contains("author")) {
+				System.out.println("Adding train document: " + file.getOriginalFilename());
 				int closeBracket = uploadedFile.indexOf(']'); // example authors[0].files[0] // just includes authors[0]
 				String authorString = uploadedFile.substring(closeBracket + 1,uploadedFile.length());
 				closeBracket = authorString.indexOf(']');
 				String subAuthorString = authorString.substring(1,closeBracket);
 				ps.addTrainDoc(subAuthorString, makeDoc(file, userAuthor, refDir));
-			} else if(uploadedFile.contains("test")) {// adding test document
-				try{
-					ps.addTestDoc(userAuthor, makeDoc(file, userAuthor, testDir));
-				}
-				catch(Exception e){
-					return e.getMessage();
-				}
+			} else if(uploadedFile.contains("test")) {
+				System.out.println("Adding test document: " + file.getOriginalFilename());
+				ps.addTestDoc(userAuthor, makeDoc(file, userAuthor, testDir));
 				testDocument = file.getOriginalFilename();
 			} else {
-				
-				try{
-					ps.addTrainDoc(userAuthor, makeDoc(file, userAuthor, refDir));
-				}
-				catch(Exception e){
-					return e.getMessage();
-				}
-
+				System.out.println("Adding train document: " + file.getOriginalFilename());
+				ps.addTrainDoc(userAuthor, makeDoc(file, userAuthor, refDir));
 			}
 		}
 
@@ -155,15 +135,12 @@ public class IndexController {
 					continue;
 				}
 				System.out.println("Adding train document: " + currentFile.getName());
-				try{
-					ps.addTrainDoc(currentAuthor, makeDoc(currentFile, currentAuthor));
-				}
-				catch(Exception e){
-					return e.toString();
-				}
+				ps.addTrainDoc(currentAuthor, makeDoc(currentFile, currentAuthor));
 			}
 		}
 
+		//switch on essay/email/tweet dbs
+		System.out.println("Problem Set XML\n" + ps.toXMLString());
 		FullAPI fullApi =  new Builder().cfdPath(xml)
 										.ps(ps)
 										.setAnalyzer(new WekaAnalyzer())

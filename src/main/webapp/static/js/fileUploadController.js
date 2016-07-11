@@ -547,7 +547,7 @@ app.controller('fileUploadController', ['$scope', 'Upload', '$timeout', function
 				 $scope.authorUpload.push(uploadObj);
 			 });
 			 Upload.upload({
-				 url: '/StartProcess',
+				 url: '/Worden/StartProcess',
 				 data: {
 					 files: $scope.files,
 					 test: $scope.testFile,

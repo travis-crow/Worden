@@ -530,7 +530,7 @@ app.controller('identifyUploadController', ['$scope', 'Upload', '$timeout', func
 			 $scope.authorUpload.push(uploadObj);
 		 });
 		Upload.upload({
-			url: '/StartIdentifyProcess',
+			url: '/Worden/StartIdentifyProcess',
 			data: {
 				test: $scope.testFile,
 				type: $scope.type,

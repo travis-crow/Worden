@@ -25,10 +25,10 @@
 					</div>
 					<div class="row center">
 						<div class="col s12 l6" style="margin-bottom: 20px;">
-							<a href="/Worden/TestDocument" id="text-your-own-document-button" class="btn-large waves-effect waves-light purple">Test Your Own Document</a>
+							<a href="../Worden/TestDocument" id="text-your-own-document-button" class="btn-large waves-effect waves-light purple">Test Your Own Document</a>
 						</div>
 						<div class="col s12 l6">
-							<a href="/Worden/IdentifyDocument" id="identify-anonymous-document-button" class="btn-large waves-effect waves-light purple">Identify Anonymous Document</a>
+							<a href="../Worden/IdentifyDocument" id="identify-anonymous-document-button" class="btn-large waves-effect waves-light purple">Identify Anonymous Document</a>
 						</div>
 					</div>
 					<br>
